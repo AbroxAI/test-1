@@ -1,4 +1,4 @@
-// ultimate-realism-full-v9.2-merged.js — Full Human-Like Multi-Turn Realism Engine (FULL PATCHED + FULL TEMPLATES + optional images)
+// ultimate-realism-full-v9.2-merged.js — Full Human-Like Multi-Turn Realism Engine with Optional Images
 (function(){
 'use strict';
 
@@ -23,7 +23,7 @@ const RESULT_WORDS = ["green","red","profit","loss","win","missed entry","recove
 "mean reversion hit","liquidity grab","fakeout","nice tp hit","sloppy execution"];
 
 /* =====================================================
-FULL TEMPLATES (v9.1)
+FULL TEMPLATES (v9.2)
 ===================================================== */
 const TESTIMONIALS = [
 "Made $450 in 2 hours using Abrox","Closed 3 trades, all green today ✅",
@@ -156,7 +156,7 @@ function humanTypingDelay(text,persona){
 }
 
 /* =====================================================
-COMMENT GENERATOR WITH OPTIONAL IMAGES (v9.2)
+COMMENT GENERATOR (v9.2 with images)
 ===================================================== */
 const GENERATED = new Set();
 const POOL = [];
@@ -176,8 +176,7 @@ function generateTimestamp(lastTimestamp=new Date()){
 }
 
 function generateComment(persona,lastTimestamp=new Date()){
-  // Always generate text first
-  let text = smartPick([
+  let poolFuncs = [
     ()=>smartPick(TESTIMONIALS,persona.memory),
     ()=>smartPick(ADDITIONAL_TEMPLATES,persona.memory),
     ()=>smartPick(OLD_MEMBER_REPLIES,persona.memory),
@@ -185,13 +184,20 @@ function generateComment(persona,lastTimestamp=new Date()){
     ()=>smartPick(ADMIN_TEMPLATES,persona.memory),
     ()=>`Anyone trading ${smartPick(ASSETS,persona.memory)} on ${smartPick(BROKERS,persona.memory)}?`,
     ()=>`Result was ${smartPick(RESULT_WORDS,persona.memory)} on ${smartPick(ASSETS,persona.memory)}`
-  ].map(f=>f()), persona.memory);
+  ];
 
-  // Optional image
+  let text;
+  if(Math.random()<0.2){
+    text = smartPick(REPLY_TEMPLATES, persona.memory) + " — " + smartPick(poolFuncs.map(f=>f()), persona.memory);
+  } else {
+    text = smartPick(poolFuncs.map(f=>f()), persona.memory);
+  }
+
+  // Optional image (25% chance)
   let image = null;
-  if(Math.random() < 0.15){  // 15% chance for image
-      const imgIndex = 1 + Math.floor(Math.random()*50); // image1.jpg → image50.jpg
-      image = `assets/image${imgIndex}.jpg`;
+  if(Math.random() < 0.25){
+    const idx = 1 + Math.floor(Math.random()*50);
+    image = `assets/image${idx}.jpg`;
   }
 
   if(persona.tone==="sarcastic") text="😂 "+text;
@@ -220,7 +226,7 @@ function smartPick(arr, memory=[]){
 }
 
 /* =====================================================
-MERGED JOINERS & QUEUE LOGIC
+MERGED JOINERS QUEUE & QUEUE LOGIC
 ===================================================== */
 let pendingJoiners = [];
 let joinerTimeout;
@@ -238,6 +244,9 @@ function queueJoiner(joinerPersona) {
   }, 1200);
 }
 
+/* =====================================================
+QUEUE & PROCESS
+===================================================== */
 const interactionQueue=[];
 let processingQueue=false;
 
@@ -254,14 +263,9 @@ async function processQueue(){
     const inter=interactionQueue.shift();
     const {persona,text,parentText,parentId,meta,image}=inter;
     const opts={};
-    if(parentText||parentId){
-      opts.replyToId=parentId||null;
-      opts.replyToText=parentText||null;
-    }
-    if(meta && meta.reaction){
-      opts.reactions=[{ emoji:meta.reaction, count:1+Math.floor(Math.random()*5) }];
-    }
-    if(image) opts.image=image;
+    if(parentText||parentId){ opts.replyToId=parentId||null; opts.replyToText=parentText||null; }
+    if(meta && meta.reaction){ opts.reactions=[{ emoji:meta.reaction, count:1+Math.floor(Math.random()*5) }]; }
+    if(image){ opts.image=image; } // <-- NEW IMAGE CONFIG
     if(window.TGRenderer?.appendMessage){
       const typing=humanTypingDelay(text,persona);
       await new Promise(r=>setTimeout(r,typing));
@@ -299,9 +303,7 @@ function autoSimulate(lastTimestamp=new Date()){
 
   if(Math.random()<0.08){
     const joinCount=1+Math.floor(Math.random()*3);
-    for(let i=0;i<joinCount;i++){
-      queueJoiner(getRandomPersona());
-    }
+    for(let i=0;i<joinCount;i++){ queueJoiner(getRandomPersona()); }
   }
 
   if(Math.random()<0.25){
@@ -339,5 +341,5 @@ function ensurePool(min=15000){
 
 ensurePool();
 setTimeout(()=>autoSimulate(),1200);
-console.log("✅ Ultimate Realism Engine FULL PATCHED v9.2 — FULL TEMPLATES + optional images, merged joiners, smooth scrolling, multi-turn replies, typing, reactions ready.");
+console.log("✅ Ultimate Realism Engine FULL PATCHED v9.2 — MERGED joiners, smooth scrolling, multi-turn replies, typing, reactions, optional images ready.");
 })();
