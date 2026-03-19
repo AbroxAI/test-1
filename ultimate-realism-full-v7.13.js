@@ -1,4 +1,4 @@
-// ultimate-realism-full-v9.2-merged.js — FULL PATCHED WITH NON-REPEATING IMAGES
+// ultimate-realism-full-v9.3-browser-merged.js — FULL PATCHED WITH NON-REPEATING IMAGES, DYNAMIC ASSETS
 (function(){
 'use strict';
 
@@ -103,24 +103,38 @@ const PERSONAS = [
 {name:"Taylor",tone:"calm",memory:[],style:"supportive"},
 {name:"Riley",tone:"optimistic",memory:[],style:"cheerful"}
 ];
-
 function getRandomPersona(){ return PERSONAS[Math.floor(Math.random()*PERSONAS.length)]; }
 
 /* =====================================================
 IMAGES MANAGEMENT
 ===================================================== */
+let assetsImages = [];
 let testimonialImagesSlots = [];
 let loopCommentIndex = 0;
 let usedImages = new Set();
 
+async function loadAssetsImagesDynamic() {
+    try {
+        const res = await fetch('assets/images.json'); // your JSON file listing images
+        const files = await res.json();
+        assetsImages = files.map(f => `assets/${f}`);
+        console.log(`✅ Loaded ${assetsImages.length} images dynamically`);
+        resetLoopImages(15000);
+    } catch(err){
+        console.warn('Failed to load images dynamically. Falling back to defaults.', err);
+        for(let i=1;i<=50;i++){ assetsImages.push(`assets/image${i}.jpg`); }
+        resetLoopImages(15000);
+    }
+}
+
 function resetLoopImages(maxComments=50){
     usedImages.clear();
     testimonialImagesSlots = [];
-    const totalImages = 2 + Math.floor(Math.random()*2); // 2–3 images per loop
+    const totalImages = Math.min(2 + Math.floor(Math.random()*2), assetsImages.length); 
     let assigned = 0;
     while(assigned < totalImages){
-        const clusterSize = 1 + Math.floor(Math.random()*2); // 1–2 images in a row
-        for(let i=0; i<clusterSize && assigned<totalImages; i++){
+        const clusterSize = 1 + Math.floor(Math.random()*2);
+        for(let i=0;i<clusterSize && assigned<totalImages;i++){
             testimonialImagesSlots.push(Math.floor(Math.random()*maxComments));
             assigned++;
         }
@@ -132,6 +146,11 @@ function resetLoopImages(maxComments=50){
 /* =====================================================
 UTILITY FUNCTIONS
 ===================================================== */
+const GENERATED = new Set();
+const POOL = [];
+window.realismEngineFullPool = POOL;
+window.realismEngineV12Pool = POOL;
+
 function smartPick(arr, memory=[]){
     let filtered = arr.filter(x=>!memory.includes(x));
     if(!filtered.length) filtered = arr;
@@ -156,11 +175,6 @@ function generateTimestamp(lastTimestamp=new Date()){
 /* =====================================================
 COMMENT GENERATOR
 ===================================================== */
-const GENERATED = new Set();
-const POOL = [];
-window.realismEngineFullPool = POOL;
-window.realismEngineV12Pool = POOL;
-
 function generateComment(persona,lastTimestamp=new Date()){
     let poolFuncs = [
         ()=>smartPick(TESTIMONIALS,persona.memory),
@@ -171,38 +185,27 @@ function generateComment(persona,lastTimestamp=new Date()){
         ()=>`Anyone trading ${smartPick(ASSETS,persona.memory)} on ${smartPick(BROKERS,persona.memory)}?`,
         ()=>`Result was ${smartPick(RESULT_WORDS,persona.memory)} on ${smartPick(ASSETS,persona.memory)}`
     ];
-
-    let text;
-    if(Math.random()<0.2){
-        text = smartPick(REPLY_TEMPLATES, persona.memory) + " — " + smartPick(poolFuncs.map(f=>f()), persona.memory);
-    } else {
-        text = smartPick(poolFuncs.map(f=>f()), persona.memory);
-    }
-
-    // Optional image assignment
+    let text = Math.random()<0.2 ? smartPick(REPLY_TEMPLATES, persona.memory) + " — " + smartPick(poolFuncs.map(f=>f()), persona.memory) 
+                                  : smartPick(poolFuncs.map(f=>f()), persona.memory);
     let image = null;
-    if(loopCommentIndex === testimonialImagesSlots[0]){
+    if(loopCommentIndex === testimonialImagesSlots[0] && assetsImages.length>0){
         let idx;
-        do { idx = 1 + Math.floor(Math.random()*50); } while(usedImages.has(idx));
-        image = `assets/image${idx}.jpg`;
+        do { idx = Math.floor(Math.random()*assetsImages.length); } 
+        while(usedImages.has(idx) && usedImages.size < assetsImages.length);
+        image = assetsImages[idx];
         usedImages.add(idx);
         testimonialImagesSlots.shift();
     }
     loopCommentIndex++;
-
     if(persona.tone==="sarcastic") text="😂 "+text;
     if(persona.tone==="analytical") text+=" 📊";
     if(persona.tone==="excited") text+=" 🚀";
-
     persona.memory.push(text);
     if(persona.memory.length>150) persona.memory.shift();
-
     let tries=0;
     while(!mark(text)&&tries<50){ text+=" "+Math.floor(Math.random()*9999); tries++; }
-
     let meta={};
     if(Math.random()<0.6){ meta.reaction=["👍","❤️","😂","💯","🔥","🚀"][Math.floor(Math.random()*6)]; }
-
     return { text, timestamp: generateTimestamp(lastTimestamp), persona, meta, image };
 }
 
@@ -213,14 +216,9 @@ function autoSimulate(lastTimestamp=new Date()){
     const persona=getRandomPersona();
     let randomComment=generateComment(persona,lastTimestamp);
     enqueueInteraction(randomComment);
-
-    if(Math.random()<0.08){
-        const joinCount=1+Math.floor(Math.random()*3);
-        for(let i=0;i<joinCount;i++){ queueJoiner(getRandomPersona()); }
-    }
-
-    if(Math.random()<0.25){
-        let clusterSize=1+Math.floor(Math.random()*3);
+    if(Math.random()<0.08){ const joinCount=1+Math.floor(Math.random()*3);
+        for(let i=0;i<joinCount;i++){ queueJoiner(getRandomPersona()); } }
+    if(Math.random()<0.25){ let clusterSize=1+Math.floor(Math.random()*3);
         for(let i=1;i<clusterSize;i++){
             let nextMsg=generateComment(persona,randomComment.timestamp);
             if(Math.random()<0.4){ nextMsg.parentText=randomComment.text; nextMsg.parentId=randomComment.id; }
@@ -229,12 +227,7 @@ function autoSimulate(lastTimestamp=new Date()){
             randomComment=nextMsg;
         }
     }
-
-    if(Math.random()<0.15){
-        const joiner=getRandomPersona();
-        simulateMultiTurnReply(joiner,randomComment);
-    }
-
+    if(Math.random()<0.15){ const joiner=getRandomPersona(); simulateMultiTurnReply(joiner,randomComment); }
     const nextDelay=randomDelay(1500,6000);
     setTimeout(()=>autoSimulate(randomComment.timestamp),nextDelay);
 }
@@ -244,13 +237,11 @@ QUEUE & PROCESS
 ===================================================== */
 const interactionQueue=[];
 let processingQueue=false;
-
 function enqueueInteraction(interaction){
     if(!interaction||!interaction.persona||!interaction.text) return;
     interactionQueue.push(interaction);
     processQueue();
 }
-
 async function processQueue(){
     if(processingQueue||interactionQueue.length===0) return;
     processingQueue=true;
@@ -289,7 +280,7 @@ function simulateMultiTurnReply(joinerPersona,parentComment,depth=0){
 }
 
 /* =====================================================
-MERGED JOINERS QUEUE & QUEUE LOGIC
+MERGED JOINERS QUEUE
 ===================================================== */
 let pendingJoiners = [];
 let joinerTimeout;
@@ -310,18 +301,6 @@ function queueJoiner(joinerPersona) {
 /* =====================================================
 POOL INIT
 ===================================================== */
-function ensurePool(min=15000){
-    let ts=new Date();
-    resetLoopImages(min);
-    while(POOL.length<min){
-        let persona=getRandomPersona();
-        let comment=generateComment(persona,ts);
-        POOL.push(comment);
-        ts=comment.timestamp;
-    }
-}
-
-ensurePool();
-setTimeout(()=>autoSimulate(),1200);
-console.log("✅ Ultimate Realism Engine FULL PATCHED v9.2 — 2–3 non-repeating images per loop, all templates included, multi-turn, reactions, joiners, typing.");
+loadAssetsImagesDynamic(); 
+console.log("✅ Ultimate Realism Engine FULL BROWSER MERGED v9.3 — dynamic images, 2–3 per loop, all templates, multi-turn, reactions, joiners, typing.");
 })();
