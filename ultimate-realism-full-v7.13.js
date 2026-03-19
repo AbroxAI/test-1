@@ -292,13 +292,6 @@
   function autoSimulate(lastTimestamp=new Date()){
     const persona=getRandomPersona();
     let randomComment=generateComment(persona,lastTimestamp);
-
-    // Trigger image generation asynchronously
-    generateImageForComment(randomComment.text).then((image) => {
-       console.log('Image generated for comment:', randomComment.text);
-       // Optionally, you can use the generated image in your UI or comment interactions
-    });
-
     enqueueInteraction(randomComment);
 
     if(Math.random()<0.08){
@@ -327,14 +320,10 @@
   IMAGE GENERATION FOR COMMENT
   ====================================================== */
   async function generateImageForComment(commentText) {
-    console.log('Generating image for comment:', commentText);
-    try {
-      const imageResponse = await image_gen.text2im({ prompt: commentText, size: "small" });
-      console.log('Image generated:', imageResponse);
-      return imageResponse;
-    } catch (error) {
-      console.error('Error generating image:', error);
-    }
+    const imageIndex = Math.floor(Math.random() * 50) + 1; // Randomly pick an image
+    const imagePath = `assets/image${imageIndex}.jpg`; // Using assets/image1.jpg, etc.
+    console.log('Generated image path:', imagePath);
+    return imagePath;
   }
 
   /* =====================================================
