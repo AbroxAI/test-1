@@ -45,7 +45,7 @@ async function processQueue(){
 
     while(interactionQueue.length>0){
         const inter=interactionQueue.shift();
-        const {persona,text,parentText,parentId,meta,image}=inter;
+        const {persona,text,parentText,parentId,meta}=inter;
         if(!persona||!text) continue;
 
         // HEADER TYPING
@@ -65,11 +65,6 @@ async function processQueue(){
             if(meta.pill) opts.pill=meta.pill;
             if(meta.jumper) opts.jumper=meta.jumper;
             if(meta.sticker) opts.sticker=meta.sticker;
-        }
-
-        // Send image along with text if it exists
-        if(image) {
-            opts.image = image; // Add image to the message options
         }
 
         if(window.TGRenderer?.appendMessage){
