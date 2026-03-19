@@ -124,14 +124,15 @@ document.addEventListener("DOMContentLoaded", () => {
       isAdmin: true
     };
 
-    const caption = `📌 Group Rules
+    const caption = `📌 Important Notice
 
-1️⃣ New members are read-only until verified.
-2️⃣ Admins do NOT DM directly.
-3️⃣ 🚫 No screenshots in chat.
-4️⃣ ⚠️ Ignore unsolicited messages.
+⚠️ This group is for verified members only.
+🚫 Do NOT trust random messages.
+🚫 Admin will NEVER DM you first.
 
-✅ To verify or contact admin, use the Contact Admin button below.`;
+❗ Stay alert and protect yourself.
+
+👇 Use the Contact Admin button below for help.`;
 
     const image = "assets/broadcast.jpg";
     const timestamp = new Date();
@@ -259,18 +260,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =====================================================
      START REALISM ENGINE
-     (Join sticker names-only fix integrated globally)
   ===================================================== */
   if (window.realism?.simulate) {
     setTimeout(() => {
       window.realism.simulate();
 
-      // Ensure join stickers are names-only
       if (window.TGRenderer) {
         const originalAppendJoin = window.TGRenderer.appendJoinSticker;
         window.TGRenderer.appendJoinSticker = function(names) {
           if (!names || names.length === 0) return;
-          // Merge names only
+
           const container = document.getElementById("tg-comments-container");
           const lastSticker = container?.querySelector(".tg-join-sticker:last-of-type");
           if (lastSticker) lastSticker.remove();
@@ -287,7 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
           wrapper.appendChild(textEl);
           container?.appendChild(wrapper);
 
-          // Auto-scroll if near bottom
           const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 80;
           if (atBottom) container.scrollTop = container.scrollHeight;
         };
