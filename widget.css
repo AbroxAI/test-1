@@ -115,44 +115,48 @@ body::before {
 .tg-pin-banner {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 16px;
-  background: rgba(23,33,43,0.6);
-  backdrop-filter: blur(16px);
-  border-radius: 18px;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(34, 44, 56, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 22px;
   color: var(--tg-text);
   font-size: 13px;
-  line-height: 1.4;
+  line-height: 1.15;
   position: sticky;
   top: calc(var(--tg-header-height) + 6px);
   z-index: 55;
-  max-width: 95%;
-  margin: 6px auto;
-  transform: translateY(-8px);
-  opacity: 0;
-  transition: all 320ms ease;
+  max-width: calc(100% - 16px);
+  margin: 6px auto 8px;
+  transform: translateY(0);
+  opacity: 1;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  min-height: 0;
   word-break: break-word;
 }
 .tg-pin-banner.show {
-  transform: translateY(0);
   opacity: 1;
+  transform: translateY(0);
 }
 .tg-pin-banner img {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
   object-fit: cover;
   flex-shrink: 0;
 }
 .tg-pin-text {
   flex: 1;
   font-size: 13px;
-  line-height: 1.35;
+  line-height: 1.1;
   color: var(--tg-text);
-  white-space: pre-line;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  min-width: 0;
 }
 .tg-pin-banner .pin-btn-container {
   display: flex;
@@ -161,16 +165,17 @@ body::before {
   flex-shrink: 0;
 }
 .tg-pin-banner .pin-btn {
-  height: 36px;
-  padding: 0 16px;
-  border-radius: 22px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 18px;
   border: none;
   background: var(--tg-accent);
   color: #fff;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 13px;
   cursor: pointer;
   transition: all .2s ease;
+  white-space: nowrap;
 }
 .tg-pin-banner .pin-btn:hover {
   transform: translateY(-2px);
