@@ -1,4 +1,7 @@
 // app-fixed.js — FINAL Telegram 2026 Integration (Header-only typing, fully synced)
+// MODIFIED: Pin banner now has only one blue "Contact Admin" button, whole pill clickable,
+//           and jumps to the admin broadcast message.
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const pinBanner = document.getElementById("tg-pin-banner");
@@ -151,30 +154,34 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!pinBanner) return;
     pinBanner.innerHTML = "";
 
+    // Make the whole pill clickable -> jump to admin broadcast
+    pinBanner.style.cursor = "pointer";
+    pinBanner.onclick = () => {
+      if (pinnedMessageId) safeJumpById(pinnedMessageId);
+    };
+
+    // Icon: broadcast image
     const img = document.createElement("img");
     img.src = image;
     img.onerror = () => (img.src = "assets/admin.jpg");
 
+    // Text: "Group Rules"
     const text = document.createElement("div");
     text.className = "tg-pin-text";
     text.textContent = "📌 Group Rules";
 
+    // Single blue button: "Contact Admin" - also jumps to same message
     const blueBtn = document.createElement("button");
     blueBtn.className = "pin-btn";
-    blueBtn.textContent = "View Pinned";
-    blueBtn.onclick = () => pinnedMessageId && safeJumpById(pinnedMessageId);
-
-    const adminBtn = document.createElement("a");
-    adminBtn.className = "glass-btn";
-    adminBtn.href = window.CONTACT_ADMIN_LINK || "https://t.me/";
-    adminBtn.target = "_blank";
-    adminBtn.rel = "noopener";
-    adminBtn.textContent = "Contact Admin";
+    blueBtn.textContent = "Contact Admin";
+    blueBtn.onclick = (e) => {
+      e.stopPropagation();  // prevent double trigger from parent click
+      if (pinnedMessageId) safeJumpById(pinnedMessageId);
+    };
 
     const btnContainer = document.createElement("div");
     btnContainer.className = "pin-btn-container";
     btnContainer.appendChild(blueBtn);
-    btnContainer.appendChild(adminBtn);
 
     pinBanner.appendChild(img);
     pinBanner.appendChild(text);
@@ -294,6 +301,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 800);
   }
 
-  console.log("✅ app.js FINAL — header-only typing authoritative, no ghost typing, fully synced, join stickers fixed.");
+  console.log("✅ app.js FINAL — pin banner: single blue Contact Admin button, whole pill clickable, jumps to admin broadcast.");
 
 });
