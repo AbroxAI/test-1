@@ -1,6 +1,6 @@
-// app-fixed.js — FINAL Telegram 2026 Integration (Header-only typing, fully synced)
-// FIXED: Pin banner shows broadcast image + "📌 Group Rules" + blue "Contact Admin" button only.
-// Whole pill clickable, jumps to admin broadcast message.
+// app-fixed.js — FINAL Telegram 2026 Integration
+// FIXED: Broadcast message has NO button. Pin banner has ONLY blue "Contact Admin" button.
+// Whole pill clickable, jumps to admin broadcast.
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -127,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
       isAdmin: true
     };
 
+    // Plain text caption - NO BUTTONS, NO HTML
     const caption = `📌 Important Notice
 
 ⚠️ This group is for verified members only.
@@ -135,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 ❗ Stay alert and protect yourself.
 
-👇 Use the Contact Admin button below for help.`;
+👇 Use the Contact Admin button at the top (pinned banner) for help.`;
 
     const image = "assets/broadcast.jpg";
     const timestamp = new Date();
@@ -166,17 +167,17 @@ document.addEventListener("DOMContentLoaded", () => {
     img.onerror = () => (img.src = "assets/admin.jpg");
     img.alt = "broadcast";
 
-    // Text: brief group rule (not the long VGT text)
+    // Text: brief group rule
     const text = document.createElement("div");
     text.className = "tg-pin-text";
     text.textContent = "📌 Group Rules";
 
-    // Single blue button (no glass) - "Contact Admin"
+    // Single BLUE button (no glass)
     const blueBtn = document.createElement("button");
-    blueBtn.className = "pin-btn";
+    blueBtn.className = "pin-btn";  // This uses the blue style from CSS
     blueBtn.textContent = "Contact Admin";
     blueBtn.onclick = (e) => {
-      e.stopPropagation();  // prevent double trigger from parent click
+      e.stopPropagation();
       if (pinnedMessageId) safeJumpById(pinnedMessageId);
     };
 
@@ -302,5 +303,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 800);
   }
 
-  console.log("✅ app.js FINAL — pin banner: broadcast image + '📌 Group Rules' + blue 'Contact Admin' button, whole pill clickable.");
+  console.log("✅ app-fixed.js — Broadcast has NO button, pin banner has ONLY blue Contact Admin button.");
 });
