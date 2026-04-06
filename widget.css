@@ -111,6 +111,7 @@ body::before {
 
 /* =========================
    PIN BANNER — Telegram pill + compress on scroll (only admin button)
+   Gap reduced to match Telegram screenshot (almost flush with header)
 ========================= */
 .tg-pin-banner {
   display: flex;
@@ -124,9 +125,9 @@ body::before {
   font-size: 14px;
   line-height: 1.2;
   position: sticky;
-  top: 12px;
+  top: 6px;                      /* reduced from 12px for tighter gap */
   z-index: 55;
-  margin: 8px 12px 12px 12px;
+  margin: 4px 12px 8px 12px;     /* top margin reduced from 8px to 4px */
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
   transition: all 0.2s ease-out;
   width: auto;
@@ -138,9 +139,9 @@ body::before {
   padding: 5px 14px;
   gap: 6px;
   font-size: 12px;
-  top: 6px;
-  margin-top: 4px;
-  margin-bottom: 8px;
+  top: 4px;                      /* even tighter when compressed */
+  margin-top: 2px;
+  margin-bottom: 6px;
 }
 
 .tg-pin-banner img {
