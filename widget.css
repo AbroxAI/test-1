@@ -37,17 +37,9 @@ html, body {
   background-attachment: fixed;
 }
 
-/* Keep your overlay to keep the “faint” effect */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(14, 22, 33, 0.85);
-  pointer-events: none;
-  z-index: 0;
-}
+/* Dark overlay removed to let the doodle pattern show clearly */
 
-/* ensure app sits above overlay */
+/* ensure app sits above background */
 #tg-comments-app {
   position: relative;
   z-index: 1;
