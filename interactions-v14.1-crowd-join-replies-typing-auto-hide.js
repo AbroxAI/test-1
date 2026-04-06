@@ -1,4 +1,4 @@
-// interactions-realism-full-v14.4.js — Unified interactions + realism engine with merged joiners & smooth scroll
+// interactions-realism-full-v14.5.js — Unified interactions + realism engine with 100 real replies
 (function(){
 'use strict';
 
@@ -76,14 +76,112 @@ async function processQueue(){
 }
 
 /* =====================================================
-   RANDOM REPLIES
+   RANDOM REPLIES — 100 REAL, NATURAL PHRASES
 ===================================================== */
-const REPLY_TEMPLATES=[
-"Yes, I agree!","Exactly 💯","Nice point 👍","I’ve been thinking the same.",
-"Can you elaborate?","Interesting 🤔","😂 That’s funny!","Absolutely 🚀",
-"Good catch!","Thanks for sharing 💡","Welcome aboard! 👋","Glad to be here!",
-"Excited to join the discussion!","I second that!","Love this insight!",
-"True that!","Well explained 💯","Interesting perspective","Couldn't agree more 👍"
+const REPLY_TEMPLATES = [
+    "Yeah, that makes total sense 💯",
+    "I was just thinking the same thing!",
+    "Exactly! Couldn't have said it better.",
+    "Great point — thanks for sharing.",
+    "Interesting take, I never saw it that way.",
+    "Facts 🔥",
+    "This is the content I signed up for.",
+    "Agreed 100%.",
+    "You read my mind 😄",
+    "Honestly, this is underrated.",
+    "Can we talk more about this?",
+    "I've been waiting for someone to say this.",
+    "Respect 🙌",
+    "This aged well.",
+    "Big brain energy 🧠",
+    "Preach!",
+    "Straight to the point — love it.",
+    "I feel seen.",
+    "Took the words right out of my mouth.",
+    "This deserves more attention.",
+    "Finally someone said it.",
+    "I'm taking notes 📝",
+    "Common sense isn't so common anymore.",
+    "Could you elaborate a bit more?",
+    "That's a solid argument.",
+    "I'm convinced.",
+    "Let's not ignore this.",
+    "This hits different.",
+    "Unpopular opinion but I agree.",
+    "Based.",
+    "Actually, that's a great observation.",
+    "I had the exact opposite view, but you made me reconsider.",
+    "This is the way.",
+    "Who else thinks this is spot on?",
+    "Thanks for the insight!",
+    "I'm saving this comment.",
+    "Why isn't this trending?",
+    "Perfectly summarized.",
+    "You dropped this 👑",
+    "I've experienced the same thing.",
+    "Real talk.",
+    "I appreciate the nuance here.",
+    "This is why I love this community.",
+    "No lies detected.",
+    "Straight facts.",
+    "I'm here for this energy.",
+    "Well articulated.",
+    "This should be pinned.",
+    "I'm sharing this with my friends.",
+    "Classic example of wisdom.",
+    "I needed to hear this today.",
+    "You just changed my perspective.",
+    "This is gold. Pure gold.",
+    "Can't argue with that logic.",
+    "Simple but profound.",
+    "I've been saying this for years.",
+    "Glad someone finally put it into words.",
+    "This is the kind of content I pay for.",
+    "Underrated comment right here.",
+    "I'm screenshotting this.",
+    "This deserves a standing ovation.",
+    "You're absolutely right.",
+    "I'm with you on this.",
+    "Let's amplify this message.",
+    "This is a masterpiece.",
+    "I wish I could upvote twice.",
+    "You've convinced me.",
+    "I'm sharing this everywhere.",
+    "This is the hill I'll die on.",
+    "You've got a point there.",
+    "I never thought of it that way.",
+    "This is eye-opening.",
+    "Thank you for saying this.",
+    "I'm curious about your take on X as well.",
+    "This is the discussion we needed.",
+    "I'm saving this for future reference.",
+    "You're spitting facts.",
+    "This is the most sensible take I've seen.",
+    "I'm nodding along.",
+    "This is the real MVP comment.",
+    "I wish more people thought like you.",
+    "You've earned a follow.",
+    "This is the kind of insight I come here for.",
+    "I'm going to quote this later.",
+    "You've summed it up perfectly.",
+    "This is a breath of fresh air.",
+    "I'm convinced you're right.",
+    "This is the way.",
+    "You've got my full support.",
+    "This is a game-changer.",
+    "I'm sharing this with my network.",
+    "You've articulated what I couldn't.",
+    "This is the comment of the year.",
+    "I'm going to remember this.",
+    "You've made my day.",
+    "This is the most underrated comment.",
+    "I'm coming back to this later.",
+    "You've earned my respect.",
+    "This is the content I live for.",
+    "You're a legend for this.",
+    "This is the best take I've seen.",
+    "I'm sharing this with everyone I know.",
+    "You've changed my mind completely."
 ];
 
 function getRandomReply(){ return REPLY_TEMPLATES[Math.floor(Math.random()*REPLY_TEMPLATES.length)]; }
@@ -179,6 +277,6 @@ function autoSimulate(){
 }
 
 setTimeout(autoSimulate,1200);
-console.log("✅ Interactions + Realism Engine unified v14.4 — shared joiners queue, smooth scroll, batch joiners, reactions, header typing ready.");
+console.log("✅ Interactions + Realism Engine unified v14.5 — 100 real replies, shared joiners queue, smooth scroll, batch joiners, reactions, header typing ready.");
 
 })();
