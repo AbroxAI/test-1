@@ -15,34 +15,51 @@
   --gold: #ffd166;
   --tg-gap: calc(var(--tg-avatar-size) * 0.7);
   --tg-nub-offset: calc(-1 * (var(--tg-gap) - 6px));
+
+  /* wallpaper tuning */
+  --tg-wallpaper-opacity: 0.22;
+  --tg-wallpaper-darken: 0.30;
 }
 
 /* =========================
    BASE
 ========================= */
 * { box-sizing: border-box; }
+
 html, body {
   height: 100dvh;
   margin: 0;
   color: var(--tg-text);
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
   -webkit-font-smoothing: antialiased;
-
-  /* real Telegram doodle */
-  background-color: #0e1621;
-  background-image: url("/assets/telegram-doodle.svg");
-  background-repeat: repeat;
-  background-size: 240px 240px;
-  background-position: center top;
-  background-attachment: fixed;
+  background: var(--tg-bg-main);
+  overflow: hidden;
 }
 
-/* Keep your overlay to keep the “faint” effect */
+body {
+  position: relative;
+}
+
+/* wallpaper layer */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(14, 22, 33, 0.85);
+  background-image: url("/assets/telegram-doodle.png");
+  background-repeat: repeat;
+  background-size: 420px 420px;
+  background-position: center top;
+  opacity: var(--tg-wallpaper-opacity);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* dark veil over wallpaper */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 22, 33, var(--tg-wallpaper-darken));
   pointer-events: none;
   z-index: 0;
 }
@@ -51,6 +68,11 @@ body::before {
 #tg-comments-app {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background: transparent;
 }
 
 .hidden { display: none !important; }
@@ -110,8 +132,7 @@ body::before {
 .tg-back-btn i, .tg-options-btn i { width: 22px; height: 22px; }
 
 /* =========================
-   PIN BANNER — Telegram pill + compress on scroll (only admin button)
-   Gap reduced to match Telegram screenshot (almost flush with header)
+   PIN BANNER
 ========================= */
 .tg-pin-banner {
   display: flex;
@@ -125,21 +146,20 @@ body::before {
   font-size: 14px;
   line-height: 1.2;
   position: sticky;
-  top: 6px;                      /* reduced from 12px for tighter gap */
+  top: 6px;
   z-index: 55;
-  margin: 4px 12px 8px 12px;     /* top margin reduced from 8px to 4px */
+  margin: 4px 12px 8px 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
   transition: all 0.2s ease-out;
   width: auto;
   max-width: calc(100% - 24px);
 }
 
-/* compressed state (added by JS) */
 .tg-pin-banner.compressed {
   padding: 5px 14px;
   gap: 6px;
   font-size: 12px;
-  top: 4px;                      /* even tighter when compressed */
+  top: 4px;
   margin-top: 2px;
   margin-bottom: 6px;
 }
@@ -166,14 +186,12 @@ body::before {
   min-width: 0;
 }
 
-/* Only admin button container */
 .pin-btn-container {
   display: flex;
   gap: 8px;
   flex-shrink: 0;
 }
 
-/* Admin button style (reuse glass-btn or create consistent pill) */
 .pin-btn-container .glass-btn,
 .pin-btn-container .pin-btn {
   height: 34px;
@@ -206,7 +224,7 @@ body::before {
 }
 
 /* =========================
-   GLASS BUTTON (Contact Admin) - also used in pin banner
+   GLASS BUTTON
 ========================= */
 .glass-btn {
   position: relative;
@@ -218,7 +236,7 @@ body::before {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: .2px;
-  border-radius: 40px;  /* pill shape */
+  border-radius: 40px;
   color: #ffffff;
   text-decoration: none;
   background: linear-gradient(180deg, rgba(46,166,255,0.30) 0%, rgba(46,166,255,0.18) 45%, rgba(46,166,255,0.10) 100%);
@@ -254,6 +272,9 @@ body::before {
   padding: 12px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  background: transparent;
+  position: relative;
+  z-index: 1;
 }
 
 /* =========================
@@ -471,8 +492,7 @@ body::before {
 #tg-jump-text { white-space: nowrap; }
 
 /* =========================
-   INPUT BAR — Pill shape matching Telegram style
-   Keeps the lock / verified message functionality
+   INPUT BAR
 ========================= */
 .tg-input-wrapper {
   padding: 8px 12px;
@@ -483,13 +503,12 @@ body::before {
   z-index: 60;
 }
 
-/* The input bar itself is a pill */
 .tg-input-bar {
   display: flex;
   align-items: center;
   gap: 10px;
   background: rgba(23, 33, 43, 0.85);
-  border-radius: 40px;           /* full pill shape */
+  border-radius: 40px;
   padding: 6px 18px;
   backdrop-filter: blur(12px);
   transition: all 0.2s ease;
@@ -500,7 +519,6 @@ body::before {
   background: rgba(23, 33, 43, 0.95);
 }
 
-/* Input field */
 .tg-comment-input {
   flex: 1;
   background: transparent;
@@ -511,7 +529,6 @@ body::before {
   padding: 8px 0;
 }
 
-/* Lock / verified indicator (if you have a lock icon or text) */
 .tg-verified-lock {
   display: inline-flex;
   align-items: center;
@@ -524,7 +541,6 @@ body::before {
   white-space: nowrap;
 }
 
-/* If you have a separate message like "Only verified members can send messages" */
 .tg-input-lock-message {
   font-size: 11px;
   color: var(--tg-muted);
@@ -537,7 +553,7 @@ body::before {
 }
 
 /* =========================
-   JOIN STICKER (Telegram 2026 style — names only)
+   JOIN STICKER
 ========================= */
 .tg-join-sticker {
   display: inline-flex;
