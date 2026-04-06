@@ -49,16 +49,17 @@ body::before {
   position: fixed;
   inset: 0;
 
-  background-image: url("/assets/telegram-doodle.png");
+  /* ✅ FIXED: relative path (no leading slash) */
+  background-image: url("assets/telegram-doodle.png");
   background-repeat: repeat;
 
-  /* 🔥 bigger pattern → more spaced, premium feel */
+  /* bigger pattern → more spaced, premium feel */
   background-size: 520px 520px;
 
-  /* 🔥 subtle alignment (not perfectly centered) */
+  /* subtle alignment (not perfectly centered) */
   background-position: 0px 0px;
 
-  /* 🔥 soften the pattern to mimic Telegram compression */
+  /* soften the pattern to mimic Telegram compression */
   filter: blur(0.3px) contrast(0.95);
 
   opacity: var(--tg-wallpaper-opacity);
