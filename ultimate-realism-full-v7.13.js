@@ -1,4 +1,4 @@
-// ultimate-realism-full-v9.4-persona-images.js — Custom Avatars for Ronny, Helge & Riley
+// ultimate-realism-full-v9.4-persona-images-jpg.js — Custom Avatars (.jpg)
 (function(){
 'use strict';
 
@@ -107,14 +107,14 @@ const REPLY_TEMPLATES = [
 ];
 
 /* =====================================================
-PERSONAS (with custom avatar images)
+PERSONAS (with custom avatar images - .jpg)
 ===================================================== */
 const PERSONAS = [
-  { name: "Ronny Pederson 📊", tone: "excited", memory: [], style: "casual", avatarUrl: "assets/ronny_pederson.png" },
+  { name: "Ronny Pederson 📊", tone: "excited", memory: [], style: "casual", avatarUrl: "assets/ronny_pederson.jpg" },
   { name: "Jordan", tone: "analytical", memory: [], style: "professional", avatarUrl: null },
   { name: "Sam", tone: "sarcastic", memory: [], style: "funny", avatarUrl: null },
-  { name: "Helge Iverson32", tone: "calm", memory: [], style: "supportive", avatarUrl: "assets/helge_iverson.png" },
-  { name: "Riley", tone: "optimistic", memory: [], style: "cheerful", avatarUrl: "assets/riley.png" }
+  { name: "Helge Iverson32", tone: "calm", memory: [], style: "supportive", avatarUrl: "assets/helge_iverson.jpg" },
+  { name: "Riley", tone: "optimistic", memory: [], style: "cheerful", avatarUrl: "assets/riley.jpg" }
 ];
 function getRandomPersona(){ return PERSONAS[Math.floor(Math.random()*PERSONAS.length)]; }
 
@@ -323,5 +323,5 @@ function ensurePool(min=15000){
 }
 ensurePool();
 setTimeout(()=>autoSimulate(),1200);
-console.log("✅ Ultimate Realism Engine v9.4 — Custom avatars for Ronny Pederson 📊, Helge Iverson32, Riley; 20 testimonial images active.");
+console.log("✅ Ultimate Realism Engine v9.4 — Custom avatars (.jpg) for Ronny Pederson 📊, Helge Iverson32, Riley; 20 testimonial images active.");
 })();
