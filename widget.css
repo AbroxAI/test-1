@@ -16,9 +16,9 @@
   --tg-gap: calc(var(--tg-avatar-size) * 0.7);
   --tg-nub-offset: calc(-1 * (var(--tg-gap) - 6px));
 
-  /* wallpaper tuning */
-  --tg-wallpaper-opacity: 0.22;
-  --tg-wallpaper-darken: 0.30;
+  /* 🔥 WALLPAPER TUNED (Telegram final) */
+  --tg-wallpaper-opacity: 0.18;    /* ultra subtle */
+  --tg-wallpaper-darken: 0.32;     /* depth layer */
 }
 
 /* =========================
@@ -40,26 +40,41 @@ body {
   position: relative;
 }
 
-/* wallpaper layer */
+/* =========================
+   TELEGRAM WALLPAPER — FINAL TUNED
+========================= */
+/* doodle layer */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
+
   background-image: url("/assets/telegram-doodle.png");
   background-repeat: repeat;
-  background-size: 420px 420px;
-  background-position: center top;
+
+  /* 🔥 bigger pattern → more spaced, premium feel */
+  background-size: 520px 520px;
+
+  /* 🔥 subtle alignment (not perfectly centered) */
+  background-position: 0px 0px;
+
+  /* 🔥 soften the pattern to mimic Telegram compression */
+  filter: blur(0.3px) contrast(0.95);
+
   opacity: var(--tg-wallpaper-opacity);
+
   pointer-events: none;
   z-index: 0;
 }
 
-/* dark veil over wallpaper */
+/* dark overlay (Telegram depth feel) */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
+
   background: rgba(14, 22, 33, var(--tg-wallpaper-darken));
+
   pointer-events: none;
   z-index: 0;
 }
