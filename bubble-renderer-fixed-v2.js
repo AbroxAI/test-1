@@ -1,4 +1,7 @@
 // bubble-renderer-fixed-v2.js — FINAL CLEAN + JOIN STICKERS + REACTION PILLS + AUTO SCROLL + MERGED JOINERS
+// MODIFIED: Removed the automatic glass "Contact Admin" button from admin messages.
+// The only Contact Admin button is now in the pin banner (blue button).
+
 (function () {
 'use strict';
 
@@ -150,16 +153,10 @@ function init() {
       wrapper.appendChild(pill);
     }
 
-    // Admin button
-    if (persona?.isAdmin) {
-      const adminBtn = document.createElement('a');
-      adminBtn.className = 'glass-btn';
-      adminBtn.href = window.CONTACT_ADMIN_LINK || 'https://t.me/';
-      adminBtn.target = '_blank';
-      adminBtn.textContent = 'Contact Admin';
-      adminBtn.style.marginTop = '8px';
-      content.appendChild(adminBtn);
-    }
+    // =====================================================
+    // REMOVED: The automatic glass "Contact Admin" button for admin messages.
+    // The only Contact Admin button is now in the pin banner (blue button).
+    // =====================================================
 
     // Timestamp
     const meta = document.createElement('div');
@@ -258,7 +255,7 @@ function init() {
     calculateTypingDuration
   };
 
-  console.log('✅ bubble-renderer FINAL V2 — JOIN STICKERS + REACTIONS + MERGE FIX integrated.');
+  console.log('✅ bubble-renderer FINAL V2 — NO admin button in messages, only pin banner blue button.');
 }
 
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
