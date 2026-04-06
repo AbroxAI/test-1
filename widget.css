@@ -16,9 +16,9 @@
   --tg-gap: calc(var(--tg-avatar-size) * 0.7);
   --tg-nub-offset: calc(-1 * (var(--tg-gap) - 6px));
 
-  /* 🔥 WALLPAPER TUNED — VISIBILITY FIX */
-  --tg-wallpaper-opacity: 0.26;    /* increased for visibility */
-  --tg-wallpaper-darken: 0.22;     /* reduced dark overlay */
+  /* wallpaper tuned — visibility fix */
+  --tg-wallpaper-opacity: 0.26;
+  --tg-wallpaper-darken: 0.22;
 }
 
 /* =========================
@@ -43,44 +43,29 @@ body {
 /* =========================
    TELEGRAM WALLPAPER — FINAL TUNED
 ========================= */
-/* doodle layer */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-
-  /* relative path (no leading slash) */
   background-image: url("assets/telegram-doodle.png");
   background-repeat: repeat;
-
-  /* bigger pattern → more spaced, premium feel */
   background-size: 520px 520px;
-
-  /* subtle alignment */
   background-position: 0px 0px;
-
-  /* soften the pattern */
   filter: blur(0.3px) contrast(0.95);
-
   opacity: var(--tg-wallpaper-opacity);
-
   pointer-events: none;
   z-index: 0;
 }
 
-/* dark overlay (reduced darkness for visibility) */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-
   background: rgba(14, 22, 33, var(--tg-wallpaper-darken));
-
   pointer-events: none;
   z-index: 0;
 }
 
-/* ensure app sits above overlay */
 #tg-comments-app {
   position: relative;
   z-index: 1;
@@ -112,7 +97,7 @@ body::after {
   justify-content: space-between;
   height: var(--tg-header-height);
   padding: 0 14px;
-  background: rgba(23,33,43,0.55);  /* was 0.78 → lighter */
+  background: rgba(23,33,43,0.55);
   backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
@@ -155,7 +140,7 @@ body::after {
   align-items: center;
   gap: 10px;
   padding: 10px 18px;
-  background: rgba(34, 44, 56, 0.75);  /* was 0.92 → lighter */
+  background: rgba(34, 44, 56, 0.75);
   backdrop-filter: blur(18px);
   border-radius: 40px;
   color: var(--tg-text);
@@ -334,7 +319,7 @@ body::after {
 }
 
 /* =========================
-   BUBBLE CONTENT
+   BUBBLE CONTENT — DEPTH + CONTRAST FIXES
 ========================= */
 .tg-bubble-content {
   padding: 10px 14px;
@@ -344,15 +329,29 @@ body::after {
   word-break: break-word;
   position: relative;
   max-width: 100%;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  /* 🔥 stronger depth + subtle edge */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.28), 0 0 0 1px rgba(255,255,255,0.04);
   overflow: visible;
   z-index: 1;
-  background: #182533;
-  color: var(--tg-text);
-  --bubble-tail-color: #182533;
+  /* 🔥 micro blur separation (Telegram polish) */
+  backdrop-filter: blur(2px);
+  /* 🔥 text boost for clarity */
+  color: #eaf2ff;
+  --bubble-tail-color: #182533; /* fallback, overridden per direction */
 }
-.tg-bubble.incoming .tg-bubble-content { background: #182533; --bubble-tail-color: #182533; }
-.tg-bubble.outgoing .tg-bubble-content { background: #2b6df6; color: #fff; --bubble-tail-color: #2b6df6; }
+
+/* Incoming bubble — lifted background */
+.tg-bubble.incoming .tg-bubble-content {
+  background: #1e2c3a;   /* was #182533 */
+  --bubble-tail-color: #1e2c3a;
+}
+
+/* Outgoing bubble — modern Telegram blue */
+.tg-bubble.outgoing .tg-bubble-content {
+  background: #3b82f6;   /* was #2b6df6, brighter/vibrant */
+  color: #fff;
+  --bubble-tail-color: #3b82f6;
+}
 
 /* =========================
    BUBBLE TAIL
@@ -523,7 +522,7 @@ body::after {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(23, 33, 43, 0.60);  /* was 0.85 → lighter */
+  background: rgba(23, 33, 43, 0.60);
   border-radius: 40px;
   padding: 6px 18px;
   backdrop-filter: blur(12px);
