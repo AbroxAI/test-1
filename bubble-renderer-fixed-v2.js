@@ -1,5 +1,4 @@
 // bubble-renderer-fixed-v2.js — FINAL CLEAN + JOIN STICKERS + REACTION PILLS + AUTO SCROLL + MERGED JOINERS
-// MODIFIED: Admin messages (broadcast) get a BLUE button (.pin-btn) instead of glass button.
 (function () {
 'use strict';
 
@@ -18,8 +17,13 @@ function init() {
   let lastDateKey = null;
   const MESSAGE_MAP = new Map();
   let PINNED_MESSAGE_ID = null;
+
+  // Track join stickers in progress to merge names
   let pendingJoiners = [];
 
+  /* =====================================================
+     DATE STICKERS
+  ===================================================== */
   function formatDateKey(date) {
     const d = new Date(date);
     return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
@@ -29,6 +33,7 @@ function init() {
     const key = formatDateKey(date);
     if (key === lastDateKey) return;
     lastDateKey = key;
+
     const sticker = document.createElement('div');
     sticker.className = 'tg-date-sticker';
     sticker.textContent = new Date(date).toLocaleDateString([], {
@@ -36,9 +41,13 @@ function init() {
       month: 'short',
       day: 'numeric'
     });
+
     container.appendChild(sticker);
   }
 
+  /* =====================================================
+     PERSONA COLORS
+  ===================================================== */
   const personaColorMap = new Map();
   const personaColors = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"];
 
@@ -51,7 +60,11 @@ function init() {
     return personaColorMap.get(name);
   }
 
+  /* =====================================================
+     CREATE BUBBLE
+  ===================================================== */
   function createBubble(persona, text, opts = {}) {
+
     const id = opts.id || ('m_' + Date.now() + '_' + Math.floor(Math.random() * 9999));
     const type = opts.type === 'outgoing' ? 'outgoing' : 'incoming';
     const timestamp = opts.timestamp || new Date();
@@ -77,12 +90,14 @@ function init() {
     const content = document.createElement('div');
     content.className = 'tg-bubble-content';
 
+    // Sender
     const sender = document.createElement('div');
     sender.className = 'tg-bubble-sender';
     sender.textContent = persona?.name || 'User';
     sender.dataset.color = getPersonaColor(persona?.name || 'User');
     content.appendChild(sender);
 
+    // Reply preview
     if (replyToText || replyToId) {
       const replyPreview = document.createElement('div');
       replyPreview.className = 'tg-reply-preview';
@@ -100,6 +115,7 @@ function init() {
       content.appendChild(replyPreview);
     }
 
+    // Image
     if (image) {
       const img = document.createElement('img');
       img.className = 'tg-bubble-image';
@@ -110,6 +126,7 @@ function init() {
       content.appendChild(img);
     }
 
+    // Text / caption
     const finalText = caption || text;
     if (finalText) {
       const textEl = document.createElement('div');
@@ -120,7 +137,7 @@ function init() {
       if (caption) PINNED_MESSAGE_ID = id;
     }
 
-    // Reactions
+    // Reactions (FIXED — attached to wrapper so it floats outside bubble)
     if (reactions.length) {
       const pill = document.createElement('div');
       pill.className = 'tg-bubble-reactions';
@@ -133,22 +150,18 @@ function init() {
       wrapper.appendChild(pill);
     }
 
-    // =====================================================
-    // ADMIN BUTTON – BLUE (not glass), only for admin messages
-    // =====================================================
+    // Admin button
     if (persona?.isAdmin) {
-      const adminBtn = document.createElement('button');
-      adminBtn.className = 'pin-btn';   // blue button, same as pin banner
+      const adminBtn = document.createElement('a');
+      adminBtn.className = 'glass-btn';
+      adminBtn.href = window.CONTACT_ADMIN_LINK || 'https://t.me/';
+      adminBtn.target = '_blank';
       adminBtn.textContent = 'Contact Admin';
       adminBtn.style.marginTop = '8px';
-      adminBtn.onclick = (e) => {
-        e.stopPropagation();
-        const link = window.CONTACT_ADMIN_LINK || 'https://t.me/';
-        window.open(link, '_blank');
-      };
       content.appendChild(adminBtn);
     }
 
+    // Timestamp
     const meta = document.createElement('div');
     meta.className = 'tg-bubble-meta';
     meta.textContent = new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -167,34 +180,52 @@ function init() {
     return { el: wrapper, id };
   }
 
+  /* =====================================================
+     JOIN STICKER (MERGED NAMES ONLY)
+  ===================================================== */
   function appendJoinSticker(names) {
     if (!names || !names.length) return;
+
     pendingJoiners.push(...names);
+
     const lastSticker = container.querySelector('.tg-join-sticker:last-of-type');
     if (lastSticker) lastSticker.remove();
+
     const wrapper = document.createElement('div');
     wrapper.className = 'tg-join-sticker';
+
     const textEl = document.createElement('div');
     textEl.className = 'tg-join-text';
     textEl.textContent = pendingJoiners.length > 3
       ? `${pendingJoiners.slice(0,3).join(', ')} & ${pendingJoiners.length-3} others joined the chat`
       : `${pendingJoiners.join(', ')} joined the chat`;
+
     wrapper.appendChild(textEl);
     container.appendChild(wrapper);
+
     const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 80;
     if (atBottom) container.scrollTop = container.scrollHeight;
+
     pendingJoiners = [];
   }
 
+  /* =====================================================
+     APPEND MESSAGE
+  ===================================================== */
   function appendMessage(persona, text, opts = {}) {
     const result = createBubble(persona, text, opts);
     container.appendChild(result.el);
+
     const atBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 80;
     if (atBottom) container.scrollTop = container.scrollHeight;
     else { unseenCount++; updateJump(); showJump(); }
+
     return result.id;
   }
 
+  /* =====================================================
+     JUMP INDICATOR
+  ===================================================== */
   function updateJump() {
     if (!jumpText) return;
     jumpText.textContent = unseenCount > 1 ? `New messages · ${unseenCount}` : 'New messages';
@@ -208,21 +239,26 @@ function init() {
     if (distance < 80) hideJump();
   });
 
+  /* =====================================================
+     TYPING DURATION
+  ===================================================== */
   function calculateTypingDuration(message) {
     if (!message) return 1200;
     let duration = message.length * 45 + Math.random() * 800;
     return Math.min(Math.max(duration, 1000), 6000);
   }
 
+  /* =====================================================
+     PUBLIC API
+  ===================================================== */
   window.TGRenderer = {
     appendMessage,
     appendJoinSticker,
     getPinnedMessageId: () => PINNED_MESSAGE_ID,
-    calculateTypingDuration,
-    MESSAGE_MAP
+    calculateTypingDuration
   };
 
-  console.log('✅ bubble-renderer: admin messages get BLUE button (.pin-btn), not glass');
+  console.log('✅ bubble-renderer FINAL V2 — JOIN STICKERS + REACTIONS + MERGE FIX integrated.');
 }
 
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
