@@ -1,4 +1,4 @@
-// ultimate-realism-full-v9.3-patched-single-image-20.js — Full Human-Like Multi-Turn Realism Engine with Optional Images
+// ultimate-realism-full-v9.4-persona-images.js — Custom Avatars for Ronny, Helge & Riley
 (function(){
 'use strict';
 
@@ -107,14 +107,14 @@ const REPLY_TEMPLATES = [
 ];
 
 /* =====================================================
-PERSONAS
+PERSONAS (with custom avatar images)
 ===================================================== */
 const PERSONAS = [
-{name:"Alex",tone:"excited",memory:[],style:"casual"},
-{name:"Jordan",tone:"analytical",memory:[],style:"professional"},
-{name:"Sam",tone:"sarcastic",memory:[],style:"funny"},
-{name:"Taylor",tone:"calm",memory:[],style:"supportive"},
-{name:"Riley",tone:"optimistic",memory:[],style:"cheerful"}
+  { name: "Ronny Pederson 📊", tone: "excited", memory: [], style: "casual", avatarUrl: "assets/ronny_pederson.png" },
+  { name: "Jordan", tone: "analytical", memory: [], style: "professional", avatarUrl: null },
+  { name: "Sam", tone: "sarcastic", memory: [], style: "funny", avatarUrl: null },
+  { name: "Helge Iverson32", tone: "calm", memory: [], style: "supportive", avatarUrl: "assets/helge_iverson.png" },
+  { name: "Riley", tone: "optimistic", memory: [], style: "cheerful", avatarUrl: "assets/riley.png" }
 ];
 function getRandomPersona(){ return PERSONAS[Math.floor(Math.random()*PERSONAS.length)]; }
 
@@ -154,7 +154,7 @@ const POOL = [];
 window.realismEngineFullPool = POOL;
 window.realismEngineV12Pool = POOL;
 
-// ✅ Hardcoded 20 images
+// ✅ Hardcoded 20 images for testimonials
 let IMAGES_POOL = Array.from({length:20},(_,i)=>`assets/image${i+1}.jpg`);
 const USED_IMAGES = new Set();
 function getUniqueImage(){
@@ -188,7 +188,8 @@ function smartPick(arr, memory=[]){
   return pick;
 }
 
-// ✅ Patched: Attach a unique image for each testimonial
+// ✅ Generates a comment. If it's a testimonial, attach a random testimonial image.
+//    Also attach persona.avatarUrl if present (will be used by renderer as profile pic).
 function generateComment(persona,lastTimestamp=new Date()){
   const poolFuncs = [
     ()=>smartPick(TESTIMONIALS,persona.memory),
@@ -208,7 +209,7 @@ function generateComment(persona,lastTimestamp=new Date()){
   }
 
   if(TESTIMONIALS.includes(text)){
-    image = getUniqueImage();
+    image = getUniqueImage();   // testimonial media image
   }
 
   if(persona.tone==="sarcastic") text="😂 "+text;
@@ -247,6 +248,8 @@ async function processQueue(){
     if(parentText||parentId){ opts.replyToId=parentId||null; opts.replyToText=parentText||null; }
     if(meta?.reaction){ opts.reactions=[{ emoji:meta.reaction, count:1+Math.floor(Math.random()*5) }]; }
     if(image) opts.image=image;
+    // ✅ Pass persona avatar if defined
+    if(persona.avatarUrl) opts.avatar = persona.avatarUrl;
     if(window.TGRenderer?.appendMessage){
       const typing=humanTypingDelay(text,persona);
       await new Promise(r=>setTimeout(r,typing));
@@ -320,5 +323,5 @@ function ensurePool(min=15000){
 }
 ensurePool();
 setTimeout(()=>autoSimulate(),1200);
-console.log("✅ Ultimate Realism Engine FULL PATCHED v9.3 — 20-image mode active, dynamic images always on testimonials, multi-turn, reactions ready.");
+console.log("✅ Ultimate Realism Engine v9.4 — Custom avatars for Ronny Pederson 📊, Helge Iverson32, Riley; 20 testimonial images active.");
 })();
