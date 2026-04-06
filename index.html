@@ -58,17 +58,8 @@
 
     <!-- CHAT CONTAINER with PIN BANNER inside (moved here) -->
     <main id="tg-comments-container" class="tg-comments-container" role="feed" aria-live="off">
-      <!-- PIN BANNER - Telegram pill style, only admin button -->
-      <div id="pinBanner" class="tg-pin-banner" role="region" aria-live="polite">
-        <img src="assets/pin-icon.svg" alt="pinned" onerror="this.style.display='none'">
-        <div class="tg-pin-text">
-          <strong>Pinned Message #4</strong><br>
-          VGT - VERIFIED MODELS MARKE...
-        </div>
-        <div class="pin-btn-container">
-          <a href="https://t.me/ph_suppp" class="glass-btn" target="_blank">Contact Admin</a>
-        </div>
-      </div>
+      <!-- PIN BANNER - Telegram pill style, will be populated by JS with broadcast image + "📌 Group Rules" + blue Contact Admin button -->
+      <div id="tg-pin-banner" class="tg-pin-banner" role="region" aria-live="polite"></div>
       <!-- Messages will be appended here by JavaScript -->
     </main>
 
@@ -98,7 +89,7 @@
   <script src="interactions-v14.1-crowd-join-replies-typing-auto-hide.js"></script>
   <script src="app-fixed.js"></script>
 
-  <!-- Initialization + Pin Banner Compress on Scroll -->
+  <!-- Initialization + Safety Checks (pin banner compress is inside app-fixed.js now) -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Initialize icons
@@ -122,30 +113,6 @@
       document.addEventListener('headerTypingStop', (e) => {
         console.log(e.detail.name + " stopped typing");
       });
-
-      // Pin banner compress on scroll (Telegram style)
-      const banner = document.getElementById('pinBanner');
-      if (banner) {
-        const scrollContainer = document.querySelector('.tg-comments-container');
-        if (scrollContainer) {
-          let ticking = false;
-          function checkCompress() {
-            if (scrollContainer.scrollTop > 25) {
-              banner.classList.add('compressed');
-            } else {
-              banner.classList.remove('compressed');
-            }
-            ticking = false;
-          }
-          scrollContainer.addEventListener('scroll', () => {
-            if (!ticking) {
-              requestAnimationFrame(checkCompress);
-              ticking = true;
-            }
-          });
-          checkCompress(); // initial check
-        }
-      }
     });
   </script>
 </body>
