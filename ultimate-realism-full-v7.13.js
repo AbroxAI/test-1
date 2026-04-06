@@ -1,4 +1,4 @@
-// ultimate-realism-full-v9.4-persona-images-jpg.js — Custom Avatars (.jpg)
+// ultimate-realism-full-v9.5-persona-avatar-fix.js — Custom Avatars attached to persona object
 (function(){
 'use strict';
 
@@ -20,7 +20,7 @@ const RESULT_WORDS = ["green","red","profit","loss","win","missed entry","recove
 "mean reversion hit","liquidity grab","fakeout","nice tp hit","sloppy execution"];
 
 /* =====================================================
-FULL TEMPLATES (FULL v9.3)
+FULL TEMPLATES
 ===================================================== */
 const TESTIMONIALS = [
 "Made $450 in 2 hours using Abrox","Closed 3 trades, all green today ✅",
@@ -154,7 +154,6 @@ const POOL = [];
 window.realismEngineFullPool = POOL;
 window.realismEngineV12Pool = POOL;
 
-// ✅ Hardcoded 20 images for testimonials
 let IMAGES_POOL = Array.from({length:20},(_,i)=>`assets/image${i+1}.jpg`);
 const USED_IMAGES = new Set();
 function getUniqueImage(){
@@ -188,8 +187,6 @@ function smartPick(arr, memory=[]){
   return pick;
 }
 
-// ✅ Generates a comment. If it's a testimonial, attach a random testimonial image.
-//    Also attach persona.avatarUrl if present (will be used by renderer as profile pic).
 function generateComment(persona,lastTimestamp=new Date()){
   const poolFuncs = [
     ()=>smartPick(TESTIMONIALS,persona.memory),
@@ -209,7 +206,7 @@ function generateComment(persona,lastTimestamp=new Date()){
   }
 
   if(TESTIMONIALS.includes(text)){
-    image = getUniqueImage();   // testimonial media image
+    image = getUniqueImage();
   }
 
   if(persona.tone==="sarcastic") text="😂 "+text;
@@ -238,6 +235,7 @@ function enqueueInteraction(interaction){
   interactionQueue.push(interaction);
   processQueue();
 }
+
 async function processQueue(){
   if(processingQueue||interactionQueue.length===0) return;
   processingQueue=true;
@@ -248,8 +246,10 @@ async function processQueue(){
     if(parentText||parentId){ opts.replyToId=parentId||null; opts.replyToText=parentText||null; }
     if(meta?.reaction){ opts.reactions=[{ emoji:meta.reaction, count:1+Math.floor(Math.random()*5) }]; }
     if(image) opts.image=image;
-    // ✅ Pass persona avatar if defined
-    if(persona.avatarUrl) opts.avatar = persona.avatarUrl;
+    
+    // ✅ FIX: Attach avatar directly to persona object (renderer reads persona.avatar)
+    if(persona.avatarUrl) persona.avatar = persona.avatarUrl;
+    
     if(window.TGRenderer?.appendMessage){
       const typing=humanTypingDelay(text,persona);
       await new Promise(r=>setTimeout(r,typing));
@@ -323,5 +323,5 @@ function ensurePool(min=15000){
 }
 ensurePool();
 setTimeout(()=>autoSimulate(),1200);
-console.log("✅ Ultimate Realism Engine v9.4 — Custom avatars (.jpg) for Ronny Pederson 📊, Helge Iverson32, Riley; 20 testimonial images active.");
+console.log("✅ Ultimate Realism Engine v9.5 — Avatar fix: custom images now display for Ronny, Helge, Riley. Others use UI Avatars.");
 })();
