@@ -1,4 +1,5 @@
-// bubble-renderer-fixed-v2.js — NO GLASS BUTTON ON ANY ADMIN MESSAGE
+// bubble-renderer-fixed-v2.js — FINAL CLEAN + JOIN STICKERS + REACTION PILLS + AUTO SCROLL + MERGED JOINERS
+// MODIFIED: Admin messages (broadcast) get a BLUE button (.pin-btn) instead of glass button.
 (function () {
 'use strict';
 
@@ -119,6 +120,7 @@ function init() {
       if (caption) PINNED_MESSAGE_ID = id;
     }
 
+    // Reactions
     if (reactions.length) {
       const pill = document.createElement('div');
       pill.className = 'tg-bubble-reactions';
@@ -131,9 +133,21 @@ function init() {
       wrapper.appendChild(pill);
     }
 
-    // ============================================================
-    // GLASS BUTTON REMOVED – no Contact Admin button inside bubbles
-    // ============================================================
+    // =====================================================
+    // ADMIN BUTTON – BLUE (not glass), only for admin messages
+    // =====================================================
+    if (persona?.isAdmin) {
+      const adminBtn = document.createElement('button');
+      adminBtn.className = 'pin-btn';   // blue button, same as pin banner
+      adminBtn.textContent = 'Contact Admin';
+      adminBtn.style.marginTop = '8px';
+      adminBtn.onclick = (e) => {
+        e.stopPropagation();
+        const link = window.CONTACT_ADMIN_LINK || 'https://t.me/';
+        window.open(link, '_blank');
+      };
+      content.appendChild(adminBtn);
+    }
 
     const meta = document.createElement('div');
     meta.className = 'tg-bubble-meta';
@@ -204,10 +218,11 @@ function init() {
     appendMessage,
     appendJoinSticker,
     getPinnedMessageId: () => PINNED_MESSAGE_ID,
-    calculateTypingDuration
+    calculateTypingDuration,
+    MESSAGE_MAP
   };
 
-  console.log('✅ bubble-renderer: NO glass button in any message (removed admin button block)');
+  console.log('✅ bubble-renderer: admin messages get BLUE button (.pin-btn), not glass');
 }
 
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
