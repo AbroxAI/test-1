@@ -1,6 +1,6 @@
 // app-fixed.js — FINAL Telegram 2026 Integration (Header-only typing, fully synced)
-// MODIFIED: Pin banner now has only one blue "Contact Admin" button, whole pill clickable,
-//           and jumps to the admin broadcast message.
+// FIXED: Pin banner shows broadcast image + "📌 Group Rules" + blue "Contact Admin" button only.
+// Whole pill clickable, jumps to admin broadcast message.
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -160,17 +160,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (pinnedMessageId) safeJumpById(pinnedMessageId);
     };
 
-    // Icon: broadcast image
+    // Icon: broadcast image (small)
     const img = document.createElement("img");
     img.src = image;
     img.onerror = () => (img.src = "assets/admin.jpg");
+    img.alt = "broadcast";
 
-    // Text: "Group Rules"
+    // Text: brief group rule (not the long VGT text)
     const text = document.createElement("div");
     text.className = "tg-pin-text";
     text.textContent = "📌 Group Rules";
 
-    // Single blue button: "Contact Admin" - also jumps to same message
+    // Single blue button (no glass) - "Contact Admin"
     const blueBtn = document.createElement("button");
     blueBtn.className = "pin-btn";
     blueBtn.textContent = "Contact Admin";
@@ -301,6 +302,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 800);
   }
 
-  console.log("✅ app.js FINAL — pin banner: single blue Contact Admin button, whole pill clickable, jumps to admin broadcast.");
-
+  console.log("✅ app.js FINAL — pin banner: broadcast image + '📌 Group Rules' + blue 'Contact Admin' button, whole pill clickable.");
 });
