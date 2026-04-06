@@ -16,9 +16,9 @@
   --tg-gap: calc(var(--tg-avatar-size) * 0.7);
   --tg-nub-offset: calc(-1 * (var(--tg-gap) - 6px));
 
-  /* 🔥 WALLPAPER TUNED (Telegram final) */
-  --tg-wallpaper-opacity: 0.18;    /* ultra subtle */
-  --tg-wallpaper-darken: 0.32;     /* depth layer */
+  /* 🔥 WALLPAPER TUNED — VISIBILITY FIX */
+  --tg-wallpaper-opacity: 0.26;    /* increased for visibility */
+  --tg-wallpaper-darken: 0.22;     /* reduced dark overlay */
 }
 
 /* =========================
@@ -49,17 +49,17 @@ body::before {
   position: fixed;
   inset: 0;
 
-  /* ✅ FIXED: relative path (no leading slash) */
+  /* relative path (no leading slash) */
   background-image: url("assets/telegram-doodle.png");
   background-repeat: repeat;
 
   /* bigger pattern → more spaced, premium feel */
   background-size: 520px 520px;
 
-  /* subtle alignment (not perfectly centered) */
+  /* subtle alignment */
   background-position: 0px 0px;
 
-  /* soften the pattern to mimic Telegram compression */
+  /* soften the pattern */
   filter: blur(0.3px) contrast(0.95);
 
   opacity: var(--tg-wallpaper-opacity);
@@ -68,7 +68,7 @@ body::before {
   z-index: 0;
 }
 
-/* dark overlay (Telegram depth feel) */
+/* dark overlay (reduced darkness for visibility) */
 body::after {
   content: "";
   position: fixed;
@@ -104,7 +104,7 @@ body::after {
 }
 
 /* =========================
-   HEADER
+   HEADER (lightened)
 ========================= */
 .tg-header {
   display: flex;
@@ -112,7 +112,7 @@ body::after {
   justify-content: space-between;
   height: var(--tg-header-height);
   padding: 0 14px;
-  background: rgba(23,33,43,0.78);
+  background: rgba(23,33,43,0.55);  /* was 0.78 → lighter */
   backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
@@ -148,14 +148,14 @@ body::after {
 .tg-back-btn i, .tg-options-btn i { width: 22px; height: 22px; }
 
 /* =========================
-   PIN BANNER
+   PIN BANNER (lightened)
 ========================= */
 .tg-pin-banner {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 18px;
-  background: rgba(34, 44, 56, 0.92);
+  background: rgba(34, 44, 56, 0.75);  /* was 0.92 → lighter */
   backdrop-filter: blur(18px);
   border-radius: 40px;
   color: var(--tg-text);
@@ -508,7 +508,7 @@ body::after {
 #tg-jump-text { white-space: nowrap; }
 
 /* =========================
-   INPUT BAR
+   INPUT BAR (lightened)
 ========================= */
 .tg-input-wrapper {
   padding: 8px 12px;
@@ -523,7 +523,7 @@ body::after {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(23, 33, 43, 0.85);
+  background: rgba(23, 33, 43, 0.60);  /* was 0.85 → lighter */
   border-radius: 40px;
   padding: 6px 18px;
   backdrop-filter: blur(12px);
@@ -532,7 +532,7 @@ body::after {
 }
 
 .tg-input-bar:hover {
-  background: rgba(23, 33, 43, 0.95);
+  background: rgba(23, 33, 43, 0.85);
 }
 
 .tg-comment-input {
