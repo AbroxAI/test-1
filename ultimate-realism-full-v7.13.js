@@ -1,10 +1,8 @@
-// ultimate-realism-full-v9.5-persona-avatar-fix.js — Custom Avatars attached to persona object
+// ultimate-realism-v9.6-calm-slow.js — Calm & Slow preset
 (function(){
 'use strict';
 
-/* =====================================================
-DATA POOLS
-===================================================== */
+// ========== DATA POOLS (same as before) ==========
 const ASSETS = ["EUR/USD","USD/JPY","GBP/USD","AUD/USD","BTC/USD","ETH/USD","USD/CHF","EUR/JPY","NZD/USD",
 "US30","NAS100","SPX500","DAX30","FTSE100","GOLD","SILVER","WTI","BRENT",
 "ADA/USD","SOL/USD","DOGE/USD","DOT/USD","LINK/USD","MATIC/USD","LUNC/USD","AVAX/USD",
@@ -19,9 +17,6 @@ const RESULT_WORDS = ["green","red","profit","loss","win","missed entry","recove
 "stop hunted","rolled over","swing profit","scalp win","gap fill","retest failed","trend follow",
 "mean reversion hit","liquidity grab","fakeout","nice tp hit","sloppy execution"];
 
-/* =====================================================
-FULL TEMPLATES
-===================================================== */
 const TESTIMONIALS = [
 "Made $450 in 2 hours using Abrox","Closed 3 trades, all green today ✅",
 "Recovered a losing trade thanks to Abrox","7 days straight of consistent profit 💹",
@@ -106,9 +101,7 @@ const REPLY_TEMPLATES = [
 "I see what you mean","That’s valid","Exactly what I was thinking","Nice explanation"
 ];
 
-/* =====================================================
-PERSONAS (with custom avatar images - .jpg)
-===================================================== */
+// ========== PERSONAS (with custom avatars) ==========
 const PERSONAS = [
   { name: "Ronny Pederson 📊", tone: "excited", memory: [], style: "casual", avatarUrl: "assets/ronny_pederson.jpg" },
   { name: "Jordan", tone: "analytical", memory: [], style: "professional", avatarUrl: null },
@@ -118,37 +111,33 @@ const PERSONAS = [
 ];
 function getRandomPersona(){ return PERSONAS[Math.floor(Math.random()*PERSONAS.length)]; }
 
-/* =====================================================
-HUMAN TIMING & TYPING
-===================================================== */
-function randomDelay(min=800,max=5000){
+// ========== CALM & SLOW TIMING ==========
+function randomDelay(min=2500, max=8000){   // slower between messages
   let delay = min + Math.random()*(max-min);
   if(window.currentPersona?.tone){
     switch(window.currentPersona.tone){
-      case "excited": delay*=0.8; break;
-      case "sarcastic": delay*=1.1; break;
-      case "analytical": delay*=1.2; break;
+      case "excited": delay*=0.9; break;
+      case "sarcastic": delay*=1.0; break;
+      case "analytical": delay*=1.1; break;
       case "calm": delay*=1.0; break;
-      case "optimistic": delay*=0.9; break;
+      case "optimistic": delay*=0.95; break;
     }
   }
   return Math.round(delay + Math.random()*300);
 }
 function humanTypingDelay(text,persona){
-  let base=400, perChar=25;
+  let base=600, perChar=35;   // slower typing
   switch(persona.tone){
-    case "analytical": perChar=30; break;
-    case "excited": perChar=18; break;
-    case "sarcastic": perChar=22; break;
-    case "calm": perChar=20; break;
-    case "optimistic": perChar=19; break;
+    case "analytical": perChar=40; break;
+    case "excited": perChar=28; break;
+    case "sarcastic": perChar=30; break;
+    case "calm": perChar=32; break;
+    case "optimistic": perChar=29; break;
   }
-  return Math.min(base + perChar*text.length,5000);
+  return Math.min(base + perChar*text.length, 7000);
 }
 
-/* =====================================================
-COMMENT GENERATOR + IMAGES (TESTIMONIALS ONLY)
-===================================================== */
+// ========== COMMENT GENERATOR (unchanged logic) ==========
 const GENERATED = new Set();
 const POOL = [];
 window.realismEngineFullPool = POOL;
@@ -176,7 +165,7 @@ function mark(text){
   return true;
 }
 function generateTimestamp(lastTimestamp=new Date()){
-  return new Date(lastTimestamp.getTime()+5000+Math.random()*20000);
+  return new Date(lastTimestamp.getTime()+8000+Math.random()*25000); // more gap
 }
 function smartPick(arr, memory=[]){
   let filtered = arr.filter(x=>!memory.includes(x));
@@ -218,13 +207,11 @@ function generateComment(persona,lastTimestamp=new Date()){
   let tries=0;
   while(!mark(text)&&tries<50){ text+=" "+Math.floor(Math.random()*9999); tries++; }
   let meta={};
-  if(Math.random()<0.6){ meta.reaction=["👍","❤️","😂","💯","🔥","🚀"][Math.floor(Math.random()*6)]; }
+  if(Math.random()<0.4){ meta.reaction=["👍","❤️","😂","💯","🔥","🚀"][Math.floor(Math.random()*6)]; } // lower reaction chance
   return { text, timestamp: generateTimestamp(lastTimestamp), persona, meta, image };
 }
 
-/* =====================================================
-QUEUE, MULTI-TURN & AUTO SIMULATION
-===================================================== */
+// ========== QUEUE & PROCESSING (same as before, with avatar fix) ==========
 const interactionQueue=[];
 let processingQueue=false;
 let pendingJoiners=[];
@@ -235,7 +222,6 @@ function enqueueInteraction(interaction){
   interactionQueue.push(interaction);
   processQueue();
 }
-
 async function processQueue(){
   if(processingQueue||interactionQueue.length===0) return;
   processingQueue=true;
@@ -246,10 +232,7 @@ async function processQueue(){
     if(parentText||parentId){ opts.replyToId=parentId||null; opts.replyToText=parentText||null; }
     if(meta?.reaction){ opts.reactions=[{ emoji:meta.reaction, count:1+Math.floor(Math.random()*5) }]; }
     if(image) opts.image=image;
-    
-    // ✅ FIX: Attach avatar directly to persona object (renderer reads persona.avatar)
     if(persona.avatarUrl) persona.avatar = persona.avatarUrl;
-    
     if(window.TGRenderer?.appendMessage){
       const typing=humanTypingDelay(text,persona);
       await new Promise(r=>setTimeout(r,typing));
@@ -270,19 +253,19 @@ function queueJoiner(joinerPersona){
       if(container) container.scrollTo({top: container.scrollHeight, behavior:'smooth'});
     }
     pendingJoiners=[];
-  },1200);
+  },1800); // slower joiner batch delay
 }
 
 function simulateMultiTurnReply(joinerPersona,parentComment,depth=0){
-  if(depth>3) return;
+  if(depth>2) return; // fewer reply chains
   const replyText=REPLY_TEMPLATES[Math.floor(Math.random()*REPLY_TEMPLATES.length)];
   setTimeout(()=>{
     enqueueInteraction({ persona:joinerPersona, text:replyText, parentText:parentComment.text, parentId:parentComment.id||null });
     joinerPersona.memory.push(replyText);
-    if(Math.random()<0.3){
+    if(Math.random()<0.2){ // lower chance for deeper replies
       simulateMultiTurnReply(getRandomPersona(), {text:replyText, id:parentComment.id}, depth+1);
     }
-  }, randomDelay(2000,12000));
+  }, randomDelay(3000,14000));
 }
 
 function autoSimulate(lastTimestamp=new Date()){
@@ -290,28 +273,28 @@ function autoSimulate(lastTimestamp=new Date()){
   let randomComment=generateComment(persona,lastTimestamp);
   enqueueInteraction(randomComment);
 
-  if(Math.random()<0.08){
-    const joinCount=1+Math.floor(Math.random()*3);
+  // Fewer joiners
+  if(Math.random()<0.05){
+    const joinCount=1+Math.floor(Math.random()*2); // 1-2 joiners only
     for(let i=0;i<joinCount;i++) queueJoiner(getRandomPersona());
   }
-  if(Math.random()<0.25){
-    const clusterSize=1+Math.floor(Math.random()*3);
+  // Smaller message clusters
+  if(Math.random()<0.15){
+    const clusterSize=1+Math.floor(Math.random()*2);
     for(let i=1;i<clusterSize;i++){
       let nextMsg=generateComment(persona,randomComment.timestamp);
-      if(Math.random()<0.4){ nextMsg.parentText=randomComment.text; nextMsg.parentId=randomComment.id; }
-      nextMsg.timestamp=new Date(randomComment.timestamp.getTime()+500+Math.random()*1500);
+      if(Math.random()<0.3){ nextMsg.parentText=randomComment.text; nextMsg.parentId=randomComment.id; }
+      nextMsg.timestamp=new Date(randomComment.timestamp.getTime()+1000+Math.random()*3000);
       enqueueInteraction(nextMsg);
       randomComment=nextMsg;
     }
   }
-  if(Math.random()<0.15) simulateMultiTurnReply(getRandomPersona(), randomComment);
+  if(Math.random()<0.1) simulateMultiTurnReply(getRandomPersona(), randomComment);
 
-  setTimeout(()=>autoSimulate(randomComment.timestamp), randomDelay(1500,6000));
+  // Slower cycle
+  setTimeout(()=>autoSimulate(randomComment.timestamp), randomDelay(3000,10000));
 }
 
-/* =====================================================
-POOL INIT
-===================================================== */
 function ensurePool(min=15000){
   let ts=new Date();
   while(POOL.length<min){
@@ -322,6 +305,6 @@ function ensurePool(min=15000){
   }
 }
 ensurePool();
-setTimeout(()=>autoSimulate(),1200);
-console.log("✅ Ultimate Realism Engine v9.5 — Avatar fix: custom images now display for Ronny, Helge, Riley. Others use UI Avatars.");
+setTimeout(()=>autoSimulate(), 3000); // start after 3 seconds
+console.log("✅ Calm & Slow preset active — relaxed chat pace, fewer joiners, lower activity.");
 })();
