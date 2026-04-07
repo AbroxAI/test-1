@@ -1,8 +1,8 @@
-// ultimate-realism-v9.6-calm-slow.js — Calm & Slow preset
+// ultimate-realism-v9.7-extended-13-personas.js — Busy & Fast preset with 13 personas (8 new)
 (function(){
 'use strict';
 
-// ========== DATA POOLS (same as before) ==========
+// ========== DATA POOLS (same as before, full arrays) ==========
 const ASSETS = ["EUR/USD","USD/JPY","GBP/USD","AUD/USD","BTC/USD","ETH/USD","USD/CHF","EUR/JPY","NZD/USD",
 "US30","NAS100","SPX500","DAX30","FTSE100","GOLD","SILVER","WTI","BRENT",
 "ADA/USD","SOL/USD","DOGE/USD","DOT/USD","LINK/USD","MATIC/USD","LUNC/USD","AVAX/USD",
@@ -17,6 +17,7 @@ const RESULT_WORDS = ["green","red","profit","loss","win","missed entry","recove
 "stop hunted","rolled over","swing profit","scalp win","gap fill","retest failed","trend follow",
 "mean reversion hit","liquidity grab","fakeout","nice tp hit","sloppy execution"];
 
+// ========== TEMPLATES (full arrays - included for completeness) ==========
 const TESTIMONIALS = [
 "Made $450 in 2 hours using Abrox","Closed 3 trades, all green today ✅",
 "Recovered a losing trade thanks to Abrox","7 days straight of consistent profit 💹",
@@ -101,43 +102,57 @@ const REPLY_TEMPLATES = [
 "I see what you mean","That’s valid","Exactly what I was thinking","Nice explanation"
 ];
 
-// ========== PERSONAS (with custom avatars) ==========
+// ========== PERSONAS: ORIGINAL 5 + 8 NEW ==========
 const PERSONAS = [
+  // Original 5 (keep as before)
   { name: "Ronny Pederson 📊", tone: "excited", memory: [], style: "casual", avatarUrl: "assets/ronny_pederson.jpg" },
   { name: "Jordan", tone: "analytical", memory: [], style: "professional", avatarUrl: null },
   { name: "Sam", tone: "sarcastic", memory: [], style: "funny", avatarUrl: null },
   { name: "Helge Iverson32", tone: "calm", memory: [], style: "supportive", avatarUrl: "assets/helge_iverson.jpg" },
-  { name: "Riley", tone: "optimistic", memory: [], style: "cheerful", avatarUrl: "assets/riley.jpg" }
+  { name: "Riley", tone: "optimistic", memory: [], style: "cheerful", avatarUrl: "assets/riley.jpg" },
+  
+  // NEW PERSONAS 1–5 (with custom images)
+  { name: "Ranksive Theoby", tone: "analytical", memory: [], style: "professional", avatarUrl: "assets/ranksive_theoby.jpg" },
+  { name: "Errol dogtash", tone: "excited", memory: [], style: "casual", avatarUrl: "assets/errol_dogtash.jpg" },
+  { name: "baykar asardag", tone: "calm", memory: [], style: "supportive", avatarUrl: "assets/baykar_asardag.jpg" },
+  { name: "David Foote", tone: "optimistic", memory: [], style: "cheerful", avatarUrl: "assets/david_foote.jpg" },
+  { name: "Mokhudu Trader 💸", tone: "excited", memory: [], style: "casual", avatarUrl: "assets/mokhudu_trader.jpg" },
+  
+  // NEW PERSONAS 6–8 (no custom image — fallback to UI avatars)
+  { name: "Ekebuike Wisdom", tone: "analytical", memory: [], style: "professional", avatarUrl: null },
+  { name: "Byran", tone: "sarcastic", memory: [], style: "funny", avatarUrl: null },
+  { name: "Tung Pham", tone: "calm", memory: [], style: "supportive", avatarUrl: null }
 ];
+
 function getRandomPersona(){ return PERSONAS[Math.floor(Math.random()*PERSONAS.length)]; }
 
-// ========== CALM & SLOW TIMING ==========
-function randomDelay(min=2500, max=8000){   // slower between messages
+// ========== BUSY & FAST TIMING (unchanged) ==========
+function randomDelay(min=800, max=3000){
   let delay = min + Math.random()*(max-min);
   if(window.currentPersona?.tone){
     switch(window.currentPersona.tone){
-      case "excited": delay*=0.9; break;
-      case "sarcastic": delay*=1.0; break;
-      case "analytical": delay*=1.1; break;
-      case "calm": delay*=1.0; break;
-      case "optimistic": delay*=0.95; break;
+      case "excited": delay*=0.7; break;
+      case "sarcastic": delay*=0.9; break;
+      case "analytical": delay*=1.0; break;
+      case "calm": delay*=0.9; break;
+      case "optimistic": delay*=0.8; break;
     }
   }
-  return Math.round(delay + Math.random()*300);
+  return Math.round(delay + Math.random()*200);
 }
 function humanTypingDelay(text,persona){
-  let base=600, perChar=35;   // slower typing
+  let base=250, perChar=18;
   switch(persona.tone){
-    case "analytical": perChar=40; break;
-    case "excited": perChar=28; break;
-    case "sarcastic": perChar=30; break;
-    case "calm": perChar=32; break;
-    case "optimistic": perChar=29; break;
+    case "analytical": perChar=22; break;
+    case "excited": perChar=14; break;
+    case "sarcastic": perChar=16; break;
+    case "calm": perChar=17; break;
+    case "optimistic": perChar=15; break;
   }
-  return Math.min(base + perChar*text.length, 7000);
+  return Math.min(base + perChar*text.length, 4000);
 }
 
-// ========== COMMENT GENERATOR (unchanged logic) ==========
+// ========== COMMENT GENERATOR (full, with higher reaction chance) ==========
 const GENERATED = new Set();
 const POOL = [];
 window.realismEngineFullPool = POOL;
@@ -165,7 +180,7 @@ function mark(text){
   return true;
 }
 function generateTimestamp(lastTimestamp=new Date()){
-  return new Date(lastTimestamp.getTime()+8000+Math.random()*25000); // more gap
+  return new Date(lastTimestamp.getTime()+8000+Math.random()*20000);
 }
 function smartPick(arr, memory=[]){
   let filtered = arr.filter(x=>!memory.includes(x));
@@ -207,11 +222,11 @@ function generateComment(persona,lastTimestamp=new Date()){
   let tries=0;
   while(!mark(text)&&tries<50){ text+=" "+Math.floor(Math.random()*9999); tries++; }
   let meta={};
-  if(Math.random()<0.4){ meta.reaction=["👍","❤️","😂","💯","🔥","🚀"][Math.floor(Math.random()*6)]; } // lower reaction chance
+  if(Math.random()<0.7){ meta.reaction=["👍","❤️","😂","💯","🔥","🚀"][Math.floor(Math.random()*6)]; }
   return { text, timestamp: generateTimestamp(lastTimestamp), persona, meta, image };
 }
 
-// ========== QUEUE & PROCESSING (same as before, with avatar fix) ==========
+// ========== QUEUE & PROCESSING (with avatar fix) ==========
 const interactionQueue=[];
 let processingQueue=false;
 let pendingJoiners=[];
@@ -253,19 +268,19 @@ function queueJoiner(joinerPersona){
       if(container) container.scrollTo({top: container.scrollHeight, behavior:'smooth'});
     }
     pendingJoiners=[];
-  },1800); // slower joiner batch delay
+  }, 800);
 }
 
 function simulateMultiTurnReply(joinerPersona,parentComment,depth=0){
-  if(depth>2) return; // fewer reply chains
+  if(depth>4) return;
   const replyText=REPLY_TEMPLATES[Math.floor(Math.random()*REPLY_TEMPLATES.length)];
   setTimeout(()=>{
     enqueueInteraction({ persona:joinerPersona, text:replyText, parentText:parentComment.text, parentId:parentComment.id||null });
     joinerPersona.memory.push(replyText);
-    if(Math.random()<0.2){ // lower chance for deeper replies
+    if(Math.random()<0.45){
       simulateMultiTurnReply(getRandomPersona(), {text:replyText, id:parentComment.id}, depth+1);
     }
-  }, randomDelay(3000,14000));
+  }, randomDelay(1200,6000));
 }
 
 function autoSimulate(lastTimestamp=new Date()){
@@ -273,28 +288,26 @@ function autoSimulate(lastTimestamp=new Date()){
   let randomComment=generateComment(persona,lastTimestamp);
   enqueueInteraction(randomComment);
 
-  // Fewer joiners
-  if(Math.random()<0.05){
-    const joinCount=1+Math.floor(Math.random()*2); // 1-2 joiners only
+  if(Math.random()<0.15){
+    const joinCount=2+Math.floor(Math.random()*3);
     for(let i=0;i<joinCount;i++) queueJoiner(getRandomPersona());
   }
-  // Smaller message clusters
-  if(Math.random()<0.15){
-    const clusterSize=1+Math.floor(Math.random()*2);
+  if(Math.random()<0.4){
+    const clusterSize=2+Math.floor(Math.random()*3);
     for(let i=1;i<clusterSize;i++){
       let nextMsg=generateComment(persona,randomComment.timestamp);
-      if(Math.random()<0.3){ nextMsg.parentText=randomComment.text; nextMsg.parentId=randomComment.id; }
-      nextMsg.timestamp=new Date(randomComment.timestamp.getTime()+1000+Math.random()*3000);
+      if(Math.random()<0.5){ nextMsg.parentText=randomComment.text; nextMsg.parentId=randomComment.id; }
+      nextMsg.timestamp=new Date(randomComment.timestamp.getTime()+300+Math.random()*1000);
       enqueueInteraction(nextMsg);
       randomComment=nextMsg;
     }
   }
-  if(Math.random()<0.1) simulateMultiTurnReply(getRandomPersona(), randomComment);
+  if(Math.random()<0.3) simulateMultiTurnReply(getRandomPersona(), randomComment);
 
-  // Slower cycle
-  setTimeout(()=>autoSimulate(randomComment.timestamp), randomDelay(3000,10000));
+  setTimeout(()=>autoSimulate(randomComment.timestamp), randomDelay(1000,3500));
 }
 
+// ========== POOL INIT ==========
 function ensurePool(min=15000){
   let ts=new Date();
   while(POOL.length<min){
@@ -305,6 +318,6 @@ function ensurePool(min=15000){
   }
 }
 ensurePool();
-setTimeout(()=>autoSimulate(), 3000); // start after 3 seconds
-console.log("✅ Calm & Slow preset active — relaxed chat pace, fewer joiners, lower activity.");
+setTimeout(()=>autoSimulate(), 1200);
+console.log("✅ Ultimate Realism Engine v9.7 — 13 personas (8 new). Custom images for Ranksive, Errol, baykar, David, Mokhudu. Busy & Fast preset.");
 })();
