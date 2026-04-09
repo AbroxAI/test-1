@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Abrox – Profit Hunters Chat</title>
 
-  <!-- Widget CSS -->
+  <!-- Widget CSS (dual-mode: low-end + high-end enhancements) -->
   <link rel="stylesheet" href="widget.css" />
 
   <script>
@@ -56,11 +56,9 @@
       </button>
     </header>
 
-    <!-- CHAT CONTAINER with PIN BANNER inside (moved here) -->
+    <!-- CHAT CONTAINER with PIN BANNER inside -->
     <main id="tg-comments-container" class="tg-comments-container" role="feed" aria-live="off">
-      <!-- PIN BANNER - Telegram pill style, will be populated by JS with broadcast image + "📌 Group Rules" + blue Contact Admin button -->
       <div id="tg-pin-banner" class="tg-pin-banner" role="region" aria-live="polite"></div>
-      <!-- Messages will be appended here by JavaScript -->
     </main>
 
     <!-- NEW MESSAGE JUMP INDICATOR -->
@@ -82,34 +80,62 @@
   <!-- Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Scripts (original loading order) -->
+  <!-- Scripts (original filenames preserved) -->
   <script src="identity-personas.js"></script>
   <script src="bubble-renderer-fixed-v2.js"></script>
   <script src="ultimate-realism-full-v7.13.js"></script>
   <script src="interactions-v14.1-crowd-join-replies-typing-auto-hide.js"></script>
   <script src="app-fixed.js"></script>
 
-  <!-- Initialization + Safety Checks (pin banner compress is inside app-fixed.js now) -->
+  <!-- Device detection (adds .high-end or .low-end to body) -->
+  <script>
+    (function() {
+      let isHighEnd = false;
+      
+      // Device memory (Chrome only)
+      if (navigator.deviceMemory && navigator.deviceMemory >= 4) {
+        isHighEnd = true;
+      }
+      // CPU cores (most browsers)
+      else if (navigator.hardwareConcurrency && navigator.hardwareConcurrency >= 6) {
+        isHighEnd = true;
+      }
+      // Fallback: test framerate for 200ms
+      if (!isHighEnd && window.requestAnimationFrame) {
+        let start = performance.now();
+        let frames = 0;
+        function testRAF() {
+          frames++;
+          if (performance.now() - start < 200) {
+            requestAnimationFrame(testRAF);
+          } else {
+            if (frames > 10) isHighEnd = true;
+            document.body.classList.add(isHighEnd ? 'high-end' : 'low-end');
+            console.log('Device mode:', isHighEnd ? 'HIGH-END' : 'LOW-END (optimised)');
+          }
+        }
+        requestAnimationFrame(testRAF);
+      } else {
+        document.body.classList.add(isHighEnd ? 'high-end' : 'low-end');
+        console.log('Device mode:', isHighEnd ? 'HIGH-END' : 'LOW-END (optimised)');
+      }
+    })();
+  </script>
+
+  <!-- Initialization -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Initialize icons
       if(window.lucide?.createIcons){ window.lucide.createIcons(); }
-
-      // Ensure TGRenderer exists
       if(!window.TGRenderer){
         console.error("TGRenderer not loaded yet.");
         return;
       }
-
-      // Lock input
       const inputBar = document.getElementById('tg-input-bar');
       if(inputBar) inputBar.classList.add('locked');
 
-      // Optional: listen to header typing
       document.addEventListener('headerTyping', (e) => {
         console.log(e.detail.name + " is typing…");
       });
-
       document.addEventListener('headerTypingStop', (e) => {
         console.log(e.detail.name + " stopped typing");
       });
