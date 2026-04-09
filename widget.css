@@ -105,7 +105,7 @@ body {
   background: transparent;
   z-index: 60;
   display: flex;
-  justify-content: center;  /* ← centers the input bar horizontally */
+  justify-content: center;
 }
 
 /* =========================
@@ -482,10 +482,13 @@ body {
 .dynamic-btn:hover {
   background-color: #1e8ae0 !important;
 }
-/* Force white colour for icons inside the blue circle */
-.dynamic-btn i,
-#dynamic-send-btn i {
+/* Force white stroke for the SVG inside the blue circle (Lucide icons use stroke) */
+.dynamic-btn svg,
+#dynamic-send-btn svg {
+  stroke: white !important;
   color: white !important;
+  width: 18px;
+  height: 18px;
 }
 
 /* =========================
