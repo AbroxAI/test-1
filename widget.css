@@ -1,4 +1,4 @@
-/* widget.css — Telegram 2026 replica — GRID LAYOUT + pill fixed at bottom:80px + dynamic input bar */
+/* widget.css — Telegram 2026 replica — GRID LAYOUT + dynamic glass input bar */
 
 /* =========================
    VARIABLES
@@ -399,11 +399,11 @@ body {
 }
 
 /* =========================
-   NEW MESSAGE BLUE PILL — FIXED POSITION
+   NEW MESSAGE BLUE PILL
 ========================= */
 #tg-jump-indicator {
   position: fixed;
-  bottom: 80px;   /* sits above input bar */
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--tg-accent);
@@ -422,15 +422,15 @@ body {
 #tg-jump-indicator.hidden { display: none; }
 
 /* =========================
-   INPUT BAR — original styles (kept for compatibility)
+   DYNAMIC GLASS INPUT BAR (smile, needle, dynamic blue button)
 ========================= */
 .tg-input-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: rgba(23, 33, 43, 0.7);
   border-radius: 40px;
-  padding: 6px 18px;
+  padding: 6px 12px;
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.08);
 }
@@ -446,26 +446,7 @@ body {
   font-size: 14px;
   padding: 8px 0;
 }
-.tg-verified-lock {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--tg-muted);
-  background: rgba(0,0,0,0.3);
-  padding: 4px 10px;
-  border-radius: 40px;
-}
-.tg-input-lock-message {
-  font-size: 11px;
-  color: var(--tg-muted);
-  margin-top: 6px;
-  text-align: center;
-}
-
-/* =========================
-   NEW DYNAMIC INPUT BAR STYLES (smile + dynamic blue circle)
-========================= */
+/* Icon buttons (smile, needle) */
 .input-icon-btn {
   background: none;
   border: none;
@@ -481,6 +462,7 @@ body {
 .input-icon-btn:hover {
   background: rgba(255,255,255,0.1);
 }
+/* Dynamic blue circle button (mic / send) */
 .dynamic-btn {
   background-color: #2ea6ff;
   border-radius: 50%;
@@ -495,12 +477,9 @@ body {
 .dynamic-btn:hover {
   background-color: #1e8ae0;
 }
+/* Force white colour for icons inside the blue circle */
 .dynamic-btn i {
-  color: white;
-}
-/* Adjust input bar padding to accommodate the new buttons */
-.tg-input-bar {
-  padding: 6px 12px;
+  color: white !important;
 }
 
 /* =========================
@@ -535,9 +514,6 @@ body {
   .tg-bubble-image { max-height: 220px; }
   .tg-pin-banner img { max-width: 50px; max-height: 50px; }
   .tg-pin-banner .pin-btn-container { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .tg-input-bar { padding: 6px 14px; }
-  /* Adjust pill for mobile */
-  #tg-jump-indicator {
-    bottom: 70px;
-  }
+  .tg-input-bar { padding: 6px 12px; }
+  #tg-jump-indicator { bottom: 70px; }
 }
