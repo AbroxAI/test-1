@@ -56,11 +56,9 @@
       </button>
     </header>
 
-    <!-- CHAT CONTAINER with PIN BANNER inside (moved here) -->
+    <!-- CHAT CONTAINER with PIN BANNER inside -->
     <main id="tg-comments-container" class="tg-comments-container" role="feed" aria-live="off">
-      <!-- PIN BANNER - Telegram pill style, will be populated by JS with broadcast image + "📌 Group Rules" + blue Contact Admin button -->
       <div id="tg-pin-banner" class="tg-pin-banner" role="region" aria-live="polite"></div>
-      <!-- Messages will be appended here by JavaScript -->
     </main>
 
     <!-- NEW MESSAGE JUMP INDICATOR -->
@@ -69,11 +67,16 @@
       <span id="tg-jump-text">New messages</span>
     </div>
 
-    <!-- LOCKED INPUT BAR ONLY -->
+    <!-- NEW DYNAMIC INPUT BAR (no lock) -->
     <div class="tg-input-wrapper" role="form" aria-label="Send a message">
-      <div class="tg-input-bar glass locked" id="tg-input-bar">
-        <i data-lucide="lock" class="tg-input-lock"></i>
-        <span class="tg-input-locked-text">Only verified members can send messages</span>
+      <div class="tg-input-bar glass" id="tg-input-bar">
+        <button id="emoji-btn" class="input-icon-btn" aria-label="Emoji">
+          <i data-lucide="smile" class="w-5 h-5"></i>
+        </button>
+        <input type="text" id="tg-message-input" class="tg-comment-input" placeholder="Type a message..." autocomplete="off">
+        <button id="dynamic-send-btn" class="input-icon-btn dynamic-btn" aria-label="Send or voice">
+          <i data-lucide="mic" class="w-5 h-5"></i>
+        </button>
       </div>
     </div>
 
@@ -89,7 +92,7 @@
   <script src="interactions-v14.1-crowd-join-replies-typing-auto-hide.js"></script>
   <script src="app-fixed.js"></script>
 
-  <!-- Initialization + Safety Checks (pin banner compress is inside app-fixed.js now) -->
+  <!-- Initialization + dynamic input logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Initialize icons
@@ -101,9 +104,69 @@
         return;
       }
 
-      // Lock input
-      const inputBar = document.getElementById('tg-input-bar');
-      if(inputBar) inputBar.classList.add('locked');
+      // ========== NEW DYNAMIC INPUT BAR LOGIC ==========
+      const messageInput = document.getElementById('tg-message-input');
+      const dynamicBtn = document.getElementById('dynamic-send-btn');
+      let currentIcon = 'mic'; // 'mic' or 'send'
+
+      function updateDynamicButton() {
+        const hasText = messageInput.value.trim().length > 0;
+        if (hasText && currentIcon !== 'send') {
+          dynamicBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i>';
+          lucide.createIcons();
+          currentIcon = 'send';
+          dynamicBtn.setAttribute('aria-label', 'Send message');
+        } else if (!hasText && currentIcon !== 'mic') {
+          dynamicBtn.innerHTML = '<i data-lucide="mic" class="w-5 h-5"></i>';
+          lucide.createIcons();
+          currentIcon = 'mic';
+          dynamicBtn.setAttribute('aria-label', 'Voice message');
+        }
+      }
+
+      function sendMessage() {
+        const text = messageInput.value.trim();
+        if (!text) return;
+        
+        const currentUser = {
+          name: "You",
+          avatar: null,
+          isAdmin: false
+        };
+        
+        if (window.TGRenderer?.appendMessage) {
+          window.TGRenderer.appendMessage(currentUser, text, { type: 'outgoing', timestamp: new Date() });
+          messageInput.value = '';
+          updateDynamicButton();
+          const container = document.getElementById('tg-comments-container');
+          if (container) container.scrollTop = container.scrollHeight;
+        } else {
+          console.warn("TGRenderer not ready");
+        }
+      }
+
+      messageInput.addEventListener('input', updateDynamicButton);
+      messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+
+      dynamicBtn.addEventListener('click', () => {
+        if (currentIcon === 'send') {
+          sendMessage();
+        } else {
+          alert("Voice messages coming soon");
+        }
+      });
+
+      const emojiBtn = document.getElementById('emoji-btn');
+      if (emojiBtn) {
+        emojiBtn.addEventListener('click', () => {
+          alert("Emoji picker coming soon");
+        });
+      }
 
       // Optional: listen to header typing
       document.addEventListener('headerTyping', (e) => {
