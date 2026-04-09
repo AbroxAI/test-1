@@ -1,4 +1,4 @@
-/* widget.css — Telegram 2026 replica — GRID LAYOUT + pill fixed at bottom:80px */
+/* widget.css — Telegram 2026 replica — GRID LAYOUT + pill fixed at bottom:80px + dynamic input bar */
 
 /* =========================
    VARIABLES
@@ -403,7 +403,7 @@ body {
 ========================= */
 #tg-jump-indicator {
   position: fixed;
-  bottom: 80px;   /* ← sits above input bar */
+  bottom: 80px;   /* sits above input bar */
   left: 50%;
   transform: translateX(-50%);
   background: var(--tg-accent);
@@ -422,7 +422,7 @@ body {
 #tg-jump-indicator.hidden { display: none; }
 
 /* =========================
-   INPUT BAR
+   INPUT BAR — original styles (kept for compatibility)
 ========================= */
 .tg-input-bar {
   display: flex;
@@ -461,6 +461,46 @@ body {
   color: var(--tg-muted);
   margin-top: 6px;
   text-align: center;
+}
+
+/* =========================
+   NEW DYNAMIC INPUT BAR STYLES (smile + dynamic blue circle)
+========================= */
+.input-icon-btn {
+  background: none;
+  border: none;
+  color: #9aa7bd;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.input-icon-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+.dynamic-btn {
+  background-color: #2ea6ff;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.dynamic-btn:hover {
+  background-color: #1e8ae0;
+}
+.dynamic-btn i {
+  color: white;
+}
+/* Adjust input bar padding to accommodate the new buttons */
+.tg-input-bar {
+  padding: 6px 12px;
 }
 
 /* =========================
