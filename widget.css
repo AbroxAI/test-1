@@ -1,4 +1,4 @@
-/* widget.css — Telegram 2026 replica — GRID LAYOUT + dynamic glass input bar */
+/* widget.css — Telegram 2026 replica — GRID LAYOUT + dynamic glass input bar (centered + white icons) */
 
 /* =========================
    VARIABLES
@@ -98,12 +98,14 @@ body {
   backface-visibility: hidden;
 }
 
-/* Input wrapper - always at bottom */
+/* Input wrapper - always at bottom, centered horizontally */
 .tg-input-wrapper {
   grid-row: 3;
   padding: 8px 12px;
   background: transparent;
   z-index: 60;
+  display: flex;
+  justify-content: center;  /* ← centers the input bar horizontally */
 }
 
 /* =========================
@@ -422,7 +424,7 @@ body {
 #tg-jump-indicator.hidden { display: none; }
 
 /* =========================
-   DYNAMIC GLASS INPUT BAR (smile, needle, dynamic blue button)
+   DYNAMIC GLASS INPUT BAR (centered, white icons inside blue circle)
 ========================= */
 .tg-input-bar {
   display: flex;
@@ -433,6 +435,8 @@ body {
   padding: 6px 12px;
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.08);
+  width: 100%;
+  max-width: 100%;
 }
 .tg-input-bar:hover {
   background: rgba(23, 33, 43, 0.85);
@@ -464,7 +468,7 @@ body {
 }
 /* Dynamic blue circle button (mic / send) */
 .dynamic-btn {
-  background-color: #2ea6ff;
+  background-color: #2ea6ff !important;
   border-radius: 50%;
   width: 34px;
   height: 34px;
@@ -475,7 +479,7 @@ body {
   transition: background 0.2s;
 }
 .dynamic-btn:hover {
-  background-color: #1e8ae0;
+  background-color: #1e8ae0 !important;
 }
 /* Force white colour for icons inside the blue circle */
 .dynamic-btn i {
