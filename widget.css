@@ -1,4 +1,4 @@
-/* widget.css — Telegram 2026 replica — FINAL FIXED (input bar + pin banner overlap) */
+/* widget.css — Telegram 2026 replica — FINAL (no input bar overlap, smooth scroll) */
 
 /* =========================
    VARIABLES
@@ -77,7 +77,7 @@ body {
 .hidden { display: none !important; }
 
 /* =========================
-   HEADER — lighter glass (performance) + z-index fix
+   HEADER — lighter glass
 ========================= */
 .tg-header {
   display: flex;
@@ -89,7 +89,7 @@ body {
   backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
-  z-index: 70; /* higher than pin banner */
+  z-index: 70;
 }
 .tg-header-center {
   display: flex;
@@ -121,7 +121,7 @@ body {
 .tg-back-btn i, .tg-options-btn i { width: 22px; height: 22px; }
 
 /* =========================
-   PIN BANNER — fixed positioning (below header)
+   PIN BANNER — below header
 ========================= */
 .tg-pin-banner {
   display: flex;
@@ -135,7 +135,7 @@ body {
   font-size: 14px;
   line-height: 1.2;
   position: sticky;
-  top: 70px; /* below header */
+  top: 70px;
   z-index: 60;
   margin: 4px 12px 8px 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
@@ -254,7 +254,7 @@ body {
 .glass-btn:active { transform: scale(.95); box-shadow: 0 4px 14px rgba(0,0,0,0.4), inset 0 3px 8px rgba(0,0,0,0.35); }
 
 /* =========================
-   COMMENTS CONTAINER — SCROLL PERFORMANCE + BOTTOM PADDING
+   COMMENTS CONTAINER — scroll performance + bottom padding
 ========================= */
 .tg-comments-container {
   contain: strict;
@@ -262,10 +262,11 @@ body {
   transform: translateZ(0);
   will-change: scroll-position;
   backface-visibility: hidden;
-  padding: 12px 12px 70px 12px; /* bottom padding prevents input bar overlap */
+  padding: 12px 12px 80px 12px;
   background: transparent;
   position: relative;
   z-index: 1;
+  flex: 1 1 auto;
 }
 
 /* =========================
@@ -309,7 +310,7 @@ body {
 }
 
 /* =========================
-   BUBBLE CONTENT — BOOSTED VISIBILITY & PERFORMANCE
+   BUBBLE CONTENT — performance optimized
 ========================= */
 .tg-bubble-content {
   padding: 10px 14px;
@@ -413,7 +414,7 @@ body {
 }
 
 /* =========================
-   REACTION FLOATING PILLS — simplified for performance
+   REACTION FLOATING PILLS
 ========================= */
 .tg-bubble-reactions{
   position:absolute;
@@ -495,15 +496,14 @@ body {
 #tg-jump-text { white-space: nowrap; }
 
 /* =========================
-   INPUT BAR — lighter glass (performance)
+   INPUT BAR — no sticky, natural flow
 ========================= */
 .tg-input-wrapper {
   padding: 8px 12px;
   background: transparent;
-  backdrop-filter: blur(16px);
-  position: sticky;
-  bottom: 0;
+  /* position: sticky removed */
   z-index: 60;
+  flex-shrink: 0;
 }
 
 .tg-input-bar {
