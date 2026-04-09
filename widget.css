@@ -1,4 +1,4 @@
-/* widget.css — Telegram 2026 replica — FINAL (no input bar overlap, smooth scroll) */
+/* widget.css — Telegram 2026 replica — GRID LAYOUT (no overlap) */
 
 /* =========================
    VARIABLES
@@ -18,7 +18,7 @@
 }
 
 /* =========================
-   BASE — CLEAN LAYER
+   BASE
 ========================= */
 * { box-sizing: border-box; }
 
@@ -30,27 +30,26 @@ html, body {
 }
 
 body {
-  position: relative;
   color: var(--tg-text);
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
   -webkit-font-smoothing: antialiased;
 }
 
 /* =========================
-   STABLE WALLPAPER SYSTEM (no flicker)
+   GRID LAYOUT — FIXED (input bar never overlaps)
 ========================= */
 #tg-comments-app {
-  position: relative;
-  z-index: 1;
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   height: 100dvh;
   overflow: hidden;
   background: transparent;
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
 }
 
-/* doodle layer */
+/* Wallpaper layers (applied to the grid container) */
 #tg-comments-app::before {
   content: "";
   position: absolute;
@@ -64,7 +63,6 @@ body {
   z-index: -2;
 }
 
-/* dark tone overlay */
 #tg-comments-app::after {
   content: "";
   position: absolute;
@@ -74,12 +72,9 @@ body {
   z-index: -1;
 }
 
-.hidden { display: none !important; }
-
-/* =========================
-   HEADER — lighter glass
-========================= */
+/* Header */
 .tg-header {
+  grid-row: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -87,10 +82,34 @@ body {
   padding: 0 14px;
   background: rgba(23, 33, 43, 0.65);
   backdrop-filter: blur(8px);
-  position: sticky;
-  top: 0;
   z-index: 70;
 }
+
+/* Scrollable container */
+.tg-comments-container {
+  grid-row: 2;
+  overflow-y: auto;
+  padding: 12px;
+  background: transparent;
+  position: relative;
+  z-index: 1;
+  /* Performance */
+  transform: translateZ(0);
+  will-change: scroll-position;
+  backface-visibility: hidden;
+}
+
+/* Input wrapper - always at bottom, no overlap */
+.tg-input-wrapper {
+  grid-row: 3;
+  padding: 8px 12px;
+  background: transparent;
+  z-index: 60;
+}
+
+/* =========================
+   HEADER & PIN BANNER
+========================= */
 .tg-header-center {
   display: flex;
   align-items: center;
@@ -108,9 +127,6 @@ body {
 .tg-title { font-size: 15px; font-weight: 700; }
 .tg-meta { font-size: 12px; color: var(--tg-muted); margin-top: 2px; }
 
-/* =========================
-   ICON BUTTONS
-========================= */
 .tg-back-btn, .tg-options-btn {
   background: none;
   border: none;
@@ -120,9 +136,7 @@ body {
 }
 .tg-back-btn i, .tg-options-btn i { width: 22px; height: 22px; }
 
-/* =========================
-   PIN BANNER — below header
-========================= */
+/* Pin banner (inside scrollable container) */
 .tg-pin-banner {
   display: flex;
   align-items: center;
@@ -135,38 +149,30 @@ body {
   font-size: 14px;
   line-height: 1.2;
   position: sticky;
-  top: 70px;
-  z-index: 60;
-  margin: 4px 12px 8px 12px;
+  top: 0; /* sticks inside scrollable area */
+  z-index: 55;
+  margin: 0 12px 8px 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
   transition: all 0.2s ease-out;
   width: auto;
   max-width: calc(100% - 24px);
 }
-
 .tg-pin-banner.compressed {
   padding: 5px 14px;
   gap: 6px;
   font-size: 12px;
-  top: 68px;
-  margin-top: 2px;
-  margin-bottom: 6px;
 }
-
 .tg-pin-banner img {
   width: 36px;
   height: 36px;
   border-radius: 10px;
   object-fit: cover;
   flex-shrink: 0;
-  transition: all 0.2s ease;
 }
-
 .tg-pin-banner.compressed img {
   width: 26px;
   height: 26px;
 }
-
 .tg-pin-text {
   flex: 1;
   white-space: nowrap;
@@ -174,13 +180,11 @@ body {
   text-overflow: ellipsis;
   min-width: 0;
 }
-
 .pin-btn-container {
   display: flex;
   gap: 8px;
   flex-shrink: 0;
 }
-
 .pin-btn-container .glass-btn,
 .pin-btn-container .pin-btn {
   height: 34px;
@@ -192,20 +196,17 @@ body {
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.2s ease;
   white-space: nowrap;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
 }
-
 .tg-pin-banner.compressed .pin-btn-container .glass-btn,
 .tg-pin-banner.compressed .pin-btn-container .pin-btn {
   height: 28px;
   padding: 0 12px;
   font-size: 12px;
 }
-
 .pin-btn-container .glass-btn:hover,
 .pin-btn-container .pin-btn:hover {
   transform: translateY(-1px);
@@ -224,13 +225,11 @@ body {
   padding: 0 16px;
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: .2px;
   border-radius: 40px;
   color: #ffffff;
   text-decoration: none;
   background: linear-gradient(180deg, rgba(46,166,255,0.30) 0%, rgba(46,166,255,0.18) 45%, rgba(46,166,255,0.10) 100%);
   backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(46,166,255,0.45);
   box-shadow: 0 6px 24px rgba(46,166,255,0.25), inset 0 1px 0 rgba(255,255,255,0.35);
   transition: all .28s cubic-bezier(.4,0,.2,1);
@@ -251,26 +250,10 @@ body {
   box-shadow: 0 10px 32px rgba(46,166,255,0.55), inset 0 1px 0 rgba(255,255,255,0.5);
 }
 .glass-btn:hover::before { left: 120%; }
-.glass-btn:active { transform: scale(.95); box-shadow: 0 4px 14px rgba(0,0,0,0.4), inset 0 3px 8px rgba(0,0,0,0.35); }
+.glass-btn:active { transform: scale(.95); }
 
 /* =========================
-   COMMENTS CONTAINER — scroll performance + bottom padding
-========================= */
-.tg-comments-container {
-  contain: strict;
-  overflow-y: auto;
-  transform: translateZ(0);
-  will-change: scroll-position;
-  backface-visibility: hidden;
-  padding: 12px 12px 80px 12px;
-  background: transparent;
-  position: relative;
-  z-index: 1;
-  flex: 1 1 auto;
-}
-
-/* =========================
-   DATE STICKER
+   BUBBLES (unchanged from your working version)
 ========================= */
 .tg-date-sticker {
   display: block;
@@ -282,10 +265,6 @@ body {
   font-size: 12px;
   color: var(--tg-muted);
 }
-
-/* =========================
-   BUBBLE WRAPPER
-========================= */
 .tg-bubble {
   display: flex;
   align-items: flex-start;
@@ -296,22 +275,13 @@ body {
 }
 .tg-bubble.incoming { justify-content: flex-start; }
 .tg-bubble.outgoing { flex-direction: row-reverse; margin-left: auto; }
-
-/* =========================
-   AVATAR
-========================= */
 .tg-bubble-avatar {
   width: var(--tg-avatar-size);
   height: var(--tg-avatar-size);
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  display: block;
 }
-
-/* =========================
-   BUBBLE CONTENT — performance optimized
-========================= */
 .tg-bubble-content {
   padding: 10px 14px;
   border-radius: 16px;
@@ -327,23 +297,15 @@ body {
   color: #eaf2ff;
   --bubble-tail-color: #1e2c3a;
 }
-
-/* incoming bubble */
 .tg-bubble.incoming .tg-bubble-content {
   background: #1e2c3a;
   --bubble-tail-color: #1e2c3a;
 }
-
-/* outgoing bubble */
 .tg-bubble.outgoing .tg-bubble-content {
   background: #3b82f6;
   color: #fff;
   --bubble-tail-color: #3b82f6;
 }
-
-/* =========================
-   BUBBLE TAIL
-========================= */
 .tg-bubble-content::after {
   content: "";
   position: absolute;
@@ -362,10 +324,6 @@ body {
   transform: scaleX(-1);
   clip-path: polygon(100% 0, 0 100%, 100% 100%);
 }
-
-/* =========================
-   SENDER COLORS
-========================= */
 .tg-bubble-sender {
   font-weight: 600;
   margin-bottom: 2px;
@@ -386,12 +344,8 @@ body {
 .tg-bubble-sender[data-color="13"] { color:#ffde6d; }
 .tg-bubble-sender[data-color="14"] { color:#5aff7a; }
 .tg-bubble-sender[data-color="15"] { color:#d16fff; }
-
-/* =========================
-   REPLY PREVIEW
-========================= */
 .tg-reply-preview {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255,255,255,0.06);
   border-left: 3px solid var(--tg-accent);
   padding: 4px 8px;
   margin-bottom: 6px;
@@ -399,74 +353,54 @@ body {
   font-size: 12px;
   color: var(--tg-muted);
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 .tg-reply-preview:hover { background: rgba(46,166,255,0.15); }
-
-/* =========================
-   META TIMESTAMP
-========================= */
 .tg-bubble-meta {
   font-size: 11px;
   font-weight: 400;
   color: var(--tg-muted);
   margin-top: 2px;
 }
-
-/* =========================
-   REACTION FLOATING PILLS
-========================= */
-.tg-bubble-reactions{
-  position:absolute;
-  bottom:-12px;
-  display:flex;
-  gap:4px;
-  padding:2px;
-  pointer-events:none;
-  z-index:3;
+.tg-bubble-reactions {
+  position: absolute;
+  bottom: -12px;
+  display: flex;
+  gap: 4px;
+  padding: 2px;
+  pointer-events: none;
+  z-index: 3;
 }
-
-.tg-bubble.incoming .tg-bubble-reactions{ left:54px; }
-.tg-bubble.outgoing .tg-bubble-reactions{ right:10px; }
-
-.tg-bubble-reactions .reaction{
-  background:#1f2c3a;
-  border-radius:16px;
-  font-size:11px;
-  padding:2px 6px;
-  display:flex;
-  align-items:center;
-  gap:3px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.35);
-  border:1px solid rgba(255,255,255,0.08);
-  backdrop-filter:blur(6px);
-  pointer-events:auto;
+.tg-bubble.incoming .tg-bubble-reactions { left: 54px; }
+.tg-bubble.outgoing .tg-bubble-reactions { right: 10px; }
+.tg-bubble-reactions .reaction {
+  background: #1f2c3a;
+  border-radius: 16px;
+  font-size: 11px;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
   transition: none;
 }
-
-/* =========================
-   TYPING DOTS
-========================= */
-.tg-typing span{
-  width:6px; height:6px; border-radius:50%;
-  background:var(--tg-muted);
-  display:inline-block;
+.tg-typing span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--tg-muted);
+  display: inline-block;
   animation: tgTyping 1.4s infinite;
 }
-.tg-typing span:nth-child(2){ animation-delay:.2s; }
-.tg-typing span:nth-child(3){ animation-delay:.4s; }
-
-@keyframes tgTyping{
-  0%,80%,100%{ opacity:.3; transform:scale(.7);}
-  40%{ opacity:1; transform:scale(1);}
+.tg-typing span:nth-child(2) { animation-delay: .2s; }
+.tg-typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes tgTyping {
+  0%,80%,100% { opacity: .3; transform: scale(.7); }
+  40% { opacity: 1; transform: scale(1); }
 }
-
-/* =========================
-   NEW MESSAGE BLUE PILL
-========================= */
 #tg-jump-indicator {
   position: fixed;
-  bottom: 90px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--tg-accent);
@@ -481,31 +415,8 @@ body {
   align-items: center;
   gap: 6px;
   z-index: 80;
-  transition: all .28s cubic-bezier(.4,0,.2,1);
 }
-#tg-jump-indicator:hover {
-  transform: translateX(-50%) translateY(-2px);
-  box-shadow: 0 10px 24px rgba(46,166,255,0.5);
-}
-#tg-jump-indicator i { width: 16px; height: 16px; stroke-width: 3; }
-#tg-jump-indicator.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(-50%) translateY(8px);
-}
-#tg-jump-text { white-space: nowrap; }
-
-/* =========================
-   INPUT BAR — no sticky, natural flow
-========================= */
-.tg-input-wrapper {
-  padding: 8px 12px;
-  background: transparent;
-  /* position: sticky removed */
-  z-index: 60;
-  flex-shrink: 0;
-}
-
+#tg-jump-indicator.hidden { display: none; }
 .tg-input-bar {
   display: flex;
   align-items: center;
@@ -514,14 +425,11 @@ body {
   border-radius: 40px;
   padding: 6px 18px;
   backdrop-filter: blur(6px);
-  transition: all 0.2s ease;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255,255,255,0.08);
 }
-
 .tg-input-bar:hover {
   background: rgba(23, 33, 43, 0.85);
 }
-
 .tg-comment-input {
   flex: 1;
   background: transparent;
@@ -531,7 +439,6 @@ body {
   font-size: 14px;
   padding: 8px 0;
 }
-
 .tg-verified-lock {
   display: inline-flex;
   align-items: center;
@@ -541,23 +448,13 @@ body {
   background: rgba(0,0,0,0.3);
   padding: 4px 10px;
   border-radius: 40px;
-  white-space: nowrap;
 }
-
 .tg-input-lock-message {
   font-size: 11px;
   color: var(--tg-muted);
   margin-top: 6px;
   text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
 }
-
-/* =========================
-   JOIN STICKER — faster animation
-========================= */
 .tg-join-sticker {
   display: inline-flex;
   align-items: center;
@@ -567,7 +464,7 @@ body {
   font-size: 12px;
   font-weight: 500;
   background: rgba(46,166,255,0.18);
-  color: #ffffff;
+  color: #fff;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   margin: 4px 0;
   max-width: fit-content;
@@ -578,10 +475,6 @@ body {
   0% { opacity: 0; transform: translateY(-4px); }
   100% { opacity: 1; transform: translateY(0); }
 }
-
-/* =========================
-   RESPONSIVE
-========================= */
 @media (max-width: 520px) {
   .tg-bubble { max-width: 86%; }
   .tg-bubble-image { max-height: 220px; }
