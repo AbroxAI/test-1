@@ -1,4 +1,4 @@
-/* widget.css — Telegram 2026 replica — GRID LAYOUT + dynamic glass input bar (centered + white icons) */
+/* widget.css — Telegram 2026 replica — GRID LAYOUT + dynamic glass input bar (centered, white icons) */
 
 /* =========================
    VARIABLES
@@ -435,8 +435,9 @@ body {
   padding: 6px 12px;
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.08);
-  width: 100%;
-  max-width: 100%;
+  width: auto;
+  min-width: 260px;
+  max-width: 90%;
 }
 .tg-input-bar:hover {
   background: rgba(23, 33, 43, 0.85);
@@ -482,7 +483,8 @@ body {
   background-color: #1e8ae0 !important;
 }
 /* Force white colour for icons inside the blue circle */
-.dynamic-btn i {
+.dynamic-btn i,
+#dynamic-send-btn i {
   color: white !important;
 }
 
@@ -518,6 +520,6 @@ body {
   .tg-bubble-image { max-height: 220px; }
   .tg-pin-banner img { max-width: 50px; max-height: 50px; }
   .tg-pin-banner .pin-btn-container { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .tg-input-bar { padding: 6px 12px; }
+  .tg-input-bar { padding: 6px 12px; min-width: 220px; }
   #tg-jump-indicator { bottom: 70px; }
 }
