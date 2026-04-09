@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Abrox – Profit Hunters Chat</title>
 
-  <!-- Widget CSS (original layout + low-end overrides) -->
+  <!-- Widget CSS -->
   <link rel="stylesheet" href="widget.css" />
 
   <script>
@@ -56,9 +56,11 @@
       </button>
     </header>
 
-    <!-- CHAT CONTAINER with PIN BANNER inside -->
+    <!-- CHAT CONTAINER with PIN BANNER inside (moved here) -->
     <main id="tg-comments-container" class="tg-comments-container" role="feed" aria-live="off">
+      <!-- PIN BANNER - Telegram pill style, will be populated by JS with broadcast image + "📌 Group Rules" + blue Contact Admin button -->
       <div id="tg-pin-banner" class="tg-pin-banner" role="region" aria-live="polite"></div>
+      <!-- Messages will be appended here by JavaScript -->
     </main>
 
     <!-- NEW MESSAGE JUMP INDICATOR -->
@@ -87,44 +89,27 @@
   <script src="interactions-v14.1-crowd-join-replies-typing-auto-hide.js"></script>
   <script src="app-fixed.js"></script>
 
-  <!-- Device detection (adds .low-end class for performance overrides) -->
-  <script>
-    (function() {
-      let isLowEnd = false;
-      // Check device memory (Chrome)
-      if (navigator.deviceMemory && navigator.deviceMemory < 4) isLowEnd = true;
-      // Check CPU cores (most browsers)
-      else if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) isLowEnd = true;
-      // Fallback: test framerate for 200ms
-      else if (window.requestAnimationFrame) {
-        let start = performance.now();
-        let frames = 0;
-        function testRAF() {
-          frames++;
-          if (performance.now() - start < 200) requestAnimationFrame(testRAF);
-          else if (frames < 10) isLowEnd = true;
-        }
-        requestAnimationFrame(testRAF);
-      }
-      if (isLowEnd) document.body.classList.add('low-end');
-      console.log('Device mode:', isLowEnd ? 'LOW-END (reduced effects)' : 'HIGH-END (full effects)');
-    })();
-  </script>
-
-  <!-- Initialization -->
+  <!-- Initialization + Safety Checks (pin banner compress is inside app-fixed.js now) -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Initialize icons
       if(window.lucide?.createIcons){ window.lucide.createIcons(); }
+
+      // Ensure TGRenderer exists
       if(!window.TGRenderer){
         console.error("TGRenderer not loaded yet.");
         return;
       }
+
+      // Lock input
       const inputBar = document.getElementById('tg-input-bar');
       if(inputBar) inputBar.classList.add('locked');
 
+      // Optional: listen to header typing
       document.addEventListener('headerTyping', (e) => {
         console.log(e.detail.name + " is typing…");
       });
+
       document.addEventListener('headerTypingStop', (e) => {
         console.log(e.detail.name + " stopped typing");
       });
