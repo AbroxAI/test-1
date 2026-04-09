@@ -1,4 +1,4 @@
-/* widget.css — Dual-mode: low-end optimized + high-end enhanced (auto-detected) */
+/* widget.css — Dual-mode: low-end optimized + high-end enhancements (pin banner below header) */
 
 /* =========================
    VARIABLES
@@ -69,7 +69,7 @@ body {
   z-index: -1;
 }
 
-/* Header (lighter glass for low-end) */
+/* Header */
 .tg-header {
   grid-row: 1;
   display: flex;
@@ -93,7 +93,7 @@ body {
   backface-visibility: hidden;
 }
 
-/* Input wrapper (no sticky, natural flow) */
+/* Input wrapper (no sticky) */
 .tg-input-wrapper {
   grid-row: 3;
   padding: 8px 12px;
@@ -101,7 +101,7 @@ body {
   z-index: 60;
 }
 
-/* Pin banner (sticky inside scroll) */
+/* PIN BANNER – now sticks below header (top: 60px) */
 .tg-pin-banner {
   display: flex;
   align-items: center;
@@ -114,7 +114,7 @@ body {
   font-size: 14px;
   line-height: 1.2;
   position: sticky;
-  top: 0;
+  top: 60px;            /* below header */
   z-index: 55;
   margin: 0 12px 8px 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
@@ -126,6 +126,7 @@ body {
   padding: 5px 14px;
   gap: 6px;
   font-size: 12px;
+  top: 58px;            /* slightly lower when compressed */
 }
 .tg-pin-banner img {
   width: 36px;
@@ -215,7 +216,7 @@ body {
 .glass-btn:hover::before { left: 120%; }
 .glass-btn:active { transform: scale(.95); }
 
-/* Bubbles – low-end optimised (no blur, lighter shadow) */
+/* Bubbles – low-end optimised */
 .tg-date-sticker {
   display: block;
   width: max-content;
@@ -360,7 +361,7 @@ body {
   40% { opacity: 1; transform: scale(1); }
 }
 
-/* New message pill – base position */
+/* New message pill – sits above input bar */
 #tg-jump-indicator {
   position: fixed;
   bottom: 80px;
@@ -381,7 +382,7 @@ body {
 }
 #tg-jump-indicator.hidden { display: none; }
 
-/* Input bar – base style */
+/* Input bar */
 .tg-input-bar {
   display: flex;
   align-items: center;
@@ -421,7 +422,7 @@ body {
   text-align: center;
 }
 
-/* Join sticker – base */
+/* Join sticker */
 .tg-join-sticker {
   display: inline-flex;
   align-items: center;
@@ -451,6 +452,7 @@ body {
   .tg-pin-banner .pin-btn-container { flex-direction: column; align-items: flex-start; gap: 6px; }
   .tg-input-bar { padding: 6px 14px; }
   #tg-jump-indicator { bottom: 70px; }
+  .tg-pin-banner { top: 58px; }
 }
 
 /* ============================================
