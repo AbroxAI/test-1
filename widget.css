@@ -1,4 +1,4 @@
-/* widget.css — Original layout + low‑end overrides (pin banner top:60px) */
+/* widget.css — Original flex layout (pin banner top:6px, container bottom padding 80px) */
 
 /* =========================
    VARIABLES
@@ -118,7 +118,7 @@ body {
 .tg-back-btn i, .tg-options-btn i { width: 22px; height: 22px; }
 
 /* =========================
-   PIN BANNER — sits just below header
+   PIN BANNER — sits below header (top:6px)
 ========================= */
 .tg-pin-banner {
   display: flex;
@@ -132,7 +132,7 @@ body {
   font-size: 14px;
   line-height: 1.2;
   position: sticky;
-  top: 60px;           /* below header (header height 58px) */
+  top: 6px;
   z-index: 55;
   margin: 4px 12px 8px 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
@@ -145,7 +145,7 @@ body {
   padding: 5px 14px;
   gap: 6px;
   font-size: 12px;
-  top: 58px;           /* slightly tighter when compressed */
+  top: 4px;
   margin-top: 2px;
   margin-bottom: 6px;
 }
@@ -251,7 +251,7 @@ body {
 .glass-btn:active { transform: scale(.95); box-shadow: 0 4px 14px rgba(0,0,0,0.4), inset 0 3px 8px rgba(0,0,0,0.35); }
 
 /* =========================
-   COMMENTS CONTAINER — bottom padding 80px
+   COMMENTS CONTAINER — added bottom padding to avoid input bar overlap
 ========================= */
 .tg-comments-container {
   flex: 1 1 auto;
@@ -571,33 +571,4 @@ body {
   .tg-pin-banner img { max-width: 50px; max-height: 50px; }
   .tg-pin-banner .pin-btn-container { flex-direction: column; align-items: flex-start; gap: 6px; }
   .tg-input-bar { padding: 6px 14px; }
-}
-
-/* ============================================
-   LOW-END DEVICE OVERRIDES (layout unchanged)
-   ============================================ */
-body.low-end .tg-header {
-  background: rgba(23,33,43,0.85);
-  backdrop-filter: none;
-}
-body.low-end .tg-pin-banner {
-  background: rgba(34,44,56,0.92);
-  backdrop-filter: none;
-}
-body.low-end .tg-input-bar {
-  background: rgba(23,33,43,0.95);
-  backdrop-filter: none;
-}
-body.low-end .tg-bubble-content {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-body.low-end .tg-bubble-reactions .reaction {
-  backdrop-filter: none;
-}
-body.low-end .glass-btn {
-  backdrop-filter: none;
-  background: linear-gradient(180deg, rgba(46,166,255,0.5) 0%, rgba(46,166,255,0.3) 100%);
-}
-body.low-end .tg-join-sticker {
-  animation: none;
 }
