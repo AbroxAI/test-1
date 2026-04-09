@@ -1,7 +1,4 @@
-// app-fixed.js — FINAL Telegram 2026 Integration
-// Broadcast message includes a glass "Contact Admin" button (like original).
-// Pin banner unchanged (keeps its own button).
-
+// app-fixed.js — ORIGINAL (pin banner with image + "Group Rules" + glass button)
 document.addEventListener("DOMContentLoaded", () => {
 
   const pinBanner = document.getElementById("tg-pin-banner");
@@ -107,34 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
       avatar: "assets/admin.jpg",
       isAdmin: true
     };
-
-    // Broadcast caption with a glass button included directly in the text.
-    // We'll use HTML inside the caption – the renderer will treat it as plain text,
-    // so we need to inject the button separately. Instead, we'll use a custom approach:
-    // Append the message without a caption, then manually add the button after the image.
-    // But that's messy. Better to use the renderer's ability to add a button via opts.
-    // However, to keep it simple, I'll construct the caption with an HTML button,
-    // and the renderer will output it as plain text – not ideal.
-    // The clean way: let the renderer add the button when persona.isAdmin = true.
-    // Since the user wants the glass button back, we'll set isAdmin: true and let
-    // the bubble renderer add the glass button (if we revert the renderer to its original).
-    // But the user said "add the glass button back in the broadcast caption" – meaning
-    // the button should be inside the caption text area. I'll do it by appending a
-    // separate message element? No – the simplest: modify the renderer to add a glass button.
-    // However, the user asked me to send the app js, not the renderer. So I'll assume
-    // the renderer is already configured to add a glass button for admin messages.
-    // If not, the button won't appear. To be safe, I'll add a button via the caption
-    // using HTML, but the renderer will escape it. So I'll instead use the renderer's
-    // built-in admin button feature, which requires isAdmin: true.
-    // The user previously had a glass button – it came from the renderer's original code.
-    // Therefore, I will keep the broadcast caption clean and rely on the renderer
-    // (which the user will keep unchanged or revert) to add the glass button.
-    // Since the user said "do not do any thing again" and then "send me app js and add the glass button back",
-    // I will add the glass button by injecting it after the message is appended.
-    // But that's complex. I'll provide a version that uses the renderer's admin button
-    // by setting isAdmin: true, and the renderer must have the glass button code.
-    // I'll assume the user has the original renderer with glass button.
-
     const caption = `📌 Important Notice
 
 ⚠️ This group is for verified members only.
@@ -142,17 +111,14 @@ document.addEventListener("DOMContentLoaded", () => {
 🚫 Admin will NEVER DM you first.
 
 ❗ Stay alert and protect yourself.`;
-
     const image = "assets/broadcast.jpg";
     const timestamp = new Date();
-
     const id = appendSafe(admin, "", {
       timestamp,
       type: "incoming",
       image,
       caption
     });
-
     return { id, image };
   }
 
@@ -171,8 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
     text.className = "tg-pin-text";
     text.textContent = "📌 Group Rules";
 
-    // Pin banner button – keep whatever style you want (blue or glass). I'll use glass to match?
-    // The user didn't specify, so I'll keep it as glass-btn (consistent with broadcast).
     const btn = document.createElement("a");
     btn.className = "glass-btn";
     btn.href = window.CONTACT_ADMIN_LINK || "https://t.me/";
@@ -258,5 +222,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 800);
   }
 
-  console.log("✅ app-fixed.js — Broadcast message relies on renderer's glass button (isAdmin=true). Pin banner uses glass button as well.");
+  console.log("✅ app-fixed.js — ORIGINAL (pin banner with image + glass button)");
 });
