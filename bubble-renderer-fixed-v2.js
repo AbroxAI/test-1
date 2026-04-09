@@ -1,4 +1,4 @@
-// bubble-renderer-fixed-v2.js — PERFORMANCE OPTIMIZED (passive scroll, lazy avatars)
+// bubble-renderer-fixed-v2.js — PERFORMANCE OPTIMIZED (no lazy loading, avatars load immediately)
 (function () {
 'use strict';
 
@@ -86,8 +86,7 @@ function init() {
     avatar.alt = persona?.name || 'User';
     avatar.src = persona?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(persona?.name || 'U')}`;
     avatar.onerror = () => avatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(persona?.name || 'U')}`;
-    // Performance: lazy load avatars
-    avatar.loading = 'lazy';
+    // ❌ Lazy loading removed – avatars load immediately
 
     const content = document.createElement('div');
     content.className = 'tg-bubble-content';
@@ -266,7 +265,7 @@ function init() {
     calculateTypingDuration
   };
 
-  console.log('✅ bubble-renderer PERFORMANCE OPTIMIZED — passive scroll, lazy avatars, RAF.');
+  console.log('✅ bubble-renderer OPTIMIZED — no lazy loading, passive scroll, RAF.');
 }
 
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
