@@ -1,4 +1,4 @@
-/* widget.css — Telegram 2026 replica — PERFORMANCE OPTIMIZED (low-end & high-end devices) */
+/* widget.css — Telegram 2026 replica — FINAL FIXED (input bar + pin banner overlap) */
 
 /* =========================
    VARIABLES
@@ -77,7 +77,7 @@ body {
 .hidden { display: none !important; }
 
 /* =========================
-   HEADER — lighter glass (performance)
+   HEADER — lighter glass (performance) + z-index fix
 ========================= */
 .tg-header {
   display: flex;
@@ -89,7 +89,7 @@ body {
   backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
-  z-index: 60;
+  z-index: 70; /* higher than pin banner */
 }
 .tg-header-center {
   display: flex;
@@ -121,7 +121,7 @@ body {
 .tg-back-btn i, .tg-options-btn i { width: 22px; height: 22px; }
 
 /* =========================
-   PIN BANNER — lighter glass (performance)
+   PIN BANNER — fixed positioning (below header)
 ========================= */
 .tg-pin-banner {
   display: flex;
@@ -135,8 +135,8 @@ body {
   font-size: 14px;
   line-height: 1.2;
   position: sticky;
-  top: 6px;
-  z-index: 55;
+  top: 70px; /* below header */
+  z-index: 60;
   margin: 4px 12px 8px 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
   transition: all 0.2s ease-out;
@@ -148,7 +148,7 @@ body {
   padding: 5px 14px;
   gap: 6px;
   font-size: 12px;
-  top: 4px;
+  top: 68px;
   margin-top: 2px;
   margin-bottom: 6px;
 }
@@ -254,7 +254,7 @@ body {
 .glass-btn:active { transform: scale(.95); box-shadow: 0 4px 14px rgba(0,0,0,0.4), inset 0 3px 8px rgba(0,0,0,0.35); }
 
 /* =========================
-   COMMENTS CONTAINER — SCROLL PERFORMANCE (optimized)
+   COMMENTS CONTAINER — SCROLL PERFORMANCE + BOTTOM PADDING
 ========================= */
 .tg-comments-container {
   contain: strict;
@@ -262,7 +262,7 @@ body {
   transform: translateZ(0);
   will-change: scroll-position;
   backface-visibility: hidden;
-  padding: 12px;
+  padding: 12px 12px 70px 12px; /* bottom padding prevents input bar overlap */
   background: transparent;
   position: relative;
   z-index: 1;
@@ -322,7 +322,7 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   overflow: visible;
   z-index: 1;
-  backdrop-filter: none; /* removed heavy blur */
+  backdrop-filter: none;
   color: #eaf2ff;
   --bubble-tail-color: #1e2c3a;
 }
@@ -440,7 +440,7 @@ body {
   border:1px solid rgba(255,255,255,0.08);
   backdrop-filter:blur(6px);
   pointer-events:auto;
-  transition: none; /* no transition for better performance */
+  transition: none;
 }
 
 /* =========================
