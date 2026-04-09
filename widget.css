@@ -1,4 +1,4 @@
-/* widget.css — Telegram 2026 replica — FINAL STABLE WALLPAPER + PERFORMANCE */
+/* widget.css — Telegram 2026 replica — PERFORMANCE OPTIMIZED (low-end & high-end devices) */
 
 /* =========================
    VARIABLES
@@ -42,7 +42,7 @@ body {
 #tg-comments-app {
   position: relative;
   z-index: 1;
-  isolation: isolate; /* prevents layer conflicts */
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   height: 100dvh;
@@ -77,7 +77,7 @@ body {
 .hidden { display: none !important; }
 
 /* =========================
-   HEADER — lighter glass
+   HEADER — lighter glass (performance)
 ========================= */
 .tg-header {
   display: flex;
@@ -85,8 +85,8 @@ body {
   justify-content: space-between;
   height: var(--tg-header-height);
   padding: 0 14px;
-  background: rgba(23, 33, 43, 0.45);
-  backdrop-filter: blur(18px);
+  background: rgba(23, 33, 43, 0.65);
+  backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
   z-index: 60;
@@ -121,15 +121,15 @@ body {
 .tg-back-btn i, .tg-options-btn i { width: 22px; height: 22px; }
 
 /* =========================
-   PIN BANNER — lighter
+   PIN BANNER — lighter glass (performance)
 ========================= */
 .tg-pin-banner {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 18px;
-  background: rgba(34, 44, 56, 0.55);
-  backdrop-filter: blur(18px);
+  background: rgba(34, 44, 56, 0.7);
+  backdrop-filter: blur(8px);
   border-radius: 40px;
   color: var(--tg-text);
   font-size: 14px;
@@ -254,19 +254,18 @@ body {
 .glass-btn:active { transform: scale(.95); box-shadow: 0 4px 14px rgba(0,0,0,0.4), inset 0 3px 8px rgba(0,0,0,0.35); }
 
 /* =========================
-   COMMENTS CONTAINER — SCROLL PERFORMANCE
+   COMMENTS CONTAINER — SCROLL PERFORMANCE (optimized)
 ========================= */
 .tg-comments-container {
-  flex: 1 1 auto;
-  padding: 12px;
+  contain: strict;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+  will-change: scroll-position;
+  backface-visibility: hidden;
+  padding: 12px;
   background: transparent;
   position: relative;
   z-index: 1;
-  transform: translateZ(0);
-  will-change: transform;
-  backface-visibility: hidden;
 }
 
 /* =========================
@@ -310,7 +309,7 @@ body {
 }
 
 /* =========================
-   BUBBLE CONTENT — BOOSTED VISIBILITY
+   BUBBLE CONTENT — BOOSTED VISIBILITY & PERFORMANCE
 ========================= */
 .tg-bubble-content {
   padding: 10px 14px;
@@ -320,10 +319,10 @@ body {
   word-break: break-word;
   position: relative;
   max-width: 100%;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   overflow: visible;
   z-index: 1;
-  backdrop-filter: blur(2px);
+  backdrop-filter: none; /* removed heavy blur */
   color: #eaf2ff;
   --bubble-tail-color: #1e2c3a;
 }
@@ -414,7 +413,7 @@ body {
 }
 
 /* =========================
-   REACTION FLOATING PILLS
+   REACTION FLOATING PILLS — simplified for performance
 ========================= */
 .tg-bubble-reactions{
   position:absolute;
@@ -441,6 +440,7 @@ body {
   border:1px solid rgba(255,255,255,0.08);
   backdrop-filter:blur(6px);
   pointer-events:auto;
+  transition: none; /* no transition for better performance */
 }
 
 /* =========================
@@ -495,7 +495,7 @@ body {
 #tg-jump-text { white-space: nowrap; }
 
 /* =========================
-   INPUT BAR — lighter glass
+   INPUT BAR — lighter glass (performance)
 ========================= */
 .tg-input-wrapper {
   padding: 8px 12px;
@@ -510,16 +510,16 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(23, 33, 43, 0.50);
+  background: rgba(23, 33, 43, 0.7);
   border-radius: 40px;
   padding: 6px 18px;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(6px);
   transition: all 0.2s ease;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .tg-input-bar:hover {
-  background: rgba(23, 33, 43, 0.75);
+  background: rgba(23, 33, 43, 0.85);
 }
 
 .tg-comment-input {
@@ -556,7 +556,7 @@ body {
 }
 
 /* =========================
-   JOIN STICKER
+   JOIN STICKER — faster animation
 ========================= */
 .tg-join-sticker {
   display: inline-flex;
@@ -572,10 +572,10 @@ body {
   margin: 4px 0;
   max-width: fit-content;
   white-space: nowrap;
-  animation: joinSlideIn 0.4s ease-out;
+  animation: joinSlideIn 0.2s ease-out;
 }
 @keyframes joinSlideIn {
-  0% { opacity: 0; transform: translateY(-8px); }
+  0% { opacity: 0; transform: translateY(-4px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
