@@ -101,11 +101,13 @@ body {
 /* Input wrapper - always at bottom, centered horizontally */
 .tg-input-wrapper {
   grid-row: 3;
-  padding: 8px 12px;
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
   background: transparent;
   z-index: 60;
   display: flex;
   justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* =========================
@@ -119,12 +121,14 @@ body {
   margin: 0 12px;
   min-width: 0;
 }
+
 .tg-header-avatar {
   width: var(--tg-avatar-size);
   height: var(--tg-avatar-size);
   border-radius: 50%;
   object-fit: cover;
 }
+
 .tg-title { font-size: 15px; font-weight: 700; }
 .tg-meta { font-size: 12px; color: var(--tg-muted); margin-top: 2px; }
 
@@ -135,6 +139,7 @@ body {
   padding: 6px;
   cursor: pointer;
 }
+
 .tg-back-btn i, .tg-options-btn i { width: 22px; height: 22px; }
 
 /* Pin banner (sticky inside scrollable area) */
@@ -158,11 +163,13 @@ body {
   width: auto;
   max-width: calc(100% - 24px);
 }
+
 .tg-pin-banner.compressed {
   padding: 5px 14px;
   gap: 6px;
   font-size: 12px;
 }
+
 .tg-pin-banner img {
   width: 36px;
   height: 36px;
@@ -170,10 +177,12 @@ body {
   object-fit: cover;
   flex-shrink: 0;
 }
+
 .tg-pin-banner.compressed img {
   width: 26px;
   height: 26px;
 }
+
 .tg-pin-text {
   flex: 1;
   white-space: nowrap;
@@ -181,11 +190,13 @@ body {
   text-overflow: ellipsis;
   min-width: 0;
 }
+
 .pin-btn-container {
   display: flex;
   gap: 8px;
   flex-shrink: 0;
 }
+
 .pin-btn-container .glass-btn,
 .pin-btn-container .pin-btn {
   height: 34px;
@@ -202,12 +213,14 @@ body {
   display: inline-flex;
   align-items: center;
 }
+
 .tg-pin-banner.compressed .pin-btn-container .glass-btn,
 .tg-pin-banner.compressed .pin-btn-container .pin-btn {
   height: 28px;
   padding: 0 12px;
   font-size: 12px;
 }
+
 .pin-btn-container .glass-btn:hover,
 .pin-btn-container .pin-btn:hover {
   transform: translateY(-1px);
@@ -236,6 +249,7 @@ body {
   transition: all .28s cubic-bezier(.4,0,.2,1);
   overflow: hidden;
 }
+
 .glass-btn::before {
   content: '';
   position: absolute;
@@ -246,10 +260,12 @@ body {
   background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 50%, rgba(255,255,255,0) 100%);
   transition: all .8s ease;
 }
+
 .glass-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 32px rgba(46,166,255,0.55), inset 0 1px 0 rgba(255,255,255,0.5);
 }
+
 .glass-btn:hover::before { left: 120%; }
 .glass-btn:active { transform: scale(.95); }
 
@@ -266,6 +282,7 @@ body {
   font-size: 12px;
   color: var(--tg-muted);
 }
+
 .tg-bubble {
   display: flex;
   align-items: flex-start;
@@ -274,8 +291,10 @@ body {
   max-width: 78%;
   position: relative;
 }
+
 .tg-bubble.incoming { justify-content: flex-start; }
 .tg-bubble.outgoing { flex-direction: row-reverse; margin-left: auto; }
+
 .tg-bubble-avatar {
   width: var(--tg-avatar-size);
   height: var(--tg-avatar-size);
@@ -283,6 +302,7 @@ body {
   object-fit: cover;
   flex-shrink: 0;
 }
+
 .tg-bubble-content {
   padding: 10px 14px;
   border-radius: 16px;
@@ -298,15 +318,18 @@ body {
   color: #eaf2ff;
   --bubble-tail-color: #1e2c3a;
 }
+
 .tg-bubble.incoming .tg-bubble-content {
   background: #1e2c3a;
   --bubble-tail-color: #1e2c3a;
 }
+
 .tg-bubble.outgoing .tg-bubble-content {
   background: #3b82f6;
   color: #fff;
   --bubble-tail-color: #3b82f6;
 }
+
 .tg-bubble-content::after {
   content: "";
   position: absolute;
@@ -316,20 +339,24 @@ body {
   pointer-events: none;
   background: var(--bubble-tail-color);
 }
+
 .tg-bubble.incoming .tg-bubble-content::after {
   left: -7px;
   clip-path: polygon(100% 0, 0 100%, 100% 100%);
 }
+
 .tg-bubble.outgoing .tg-bubble-content::after {
   right: -7px;
   transform: scaleX(-1);
   clip-path: polygon(100% 0, 0 100%, 100% 100%);
 }
+
 .tg-bubble-sender {
   font-weight: 600;
   margin-bottom: 2px;
   font-size: 13px;
 }
+
 .tg-bubble-sender[data-color="1"] { color:#2ea6ff; }
 .tg-bubble-sender[data-color="2"] { color:#ff6b6b; }
 .tg-bubble-sender[data-color="3"] { color:#ffb86c; }
@@ -345,6 +372,7 @@ body {
 .tg-bubble-sender[data-color="13"] { color:#ffde6d; }
 .tg-bubble-sender[data-color="14"] { color:#5aff7a; }
 .tg-bubble-sender[data-color="15"] { color:#d16fff; }
+
 .tg-reply-preview {
   background: rgba(255,255,255,0.06);
   border-left: 3px solid var(--tg-accent);
@@ -355,13 +383,16 @@ body {
   color: var(--tg-muted);
   cursor: pointer;
 }
+
 .tg-reply-preview:hover { background: rgba(46,166,255,0.15); }
+
 .tg-bubble-meta {
   font-size: 11px;
   font-weight: 400;
   color: var(--tg-muted);
   margin-top: 2px;
 }
+
 .tg-bubble-reactions {
   position: absolute;
   bottom: -12px;
@@ -371,8 +402,10 @@ body {
   pointer-events: none;
   z-index: 3;
 }
+
 .tg-bubble.incoming .tg-bubble-reactions { left: 54px; }
 .tg-bubble.outgoing .tg-bubble-reactions { right: 10px; }
+
 .tg-bubble-reactions .reaction {
   background: #1f2c3a;
   border-radius: 16px;
@@ -387,14 +420,17 @@ body {
   pointer-events: auto;
   transition: none;
 }
+
 .tg-typing span {
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--tg-muted);
   display: inline-block;
   animation: tgTyping 1.4s infinite;
 }
+
 .tg-typing span:nth-child(2) { animation-delay: .2s; }
 .tg-typing span:nth-child(3) { animation-delay: .4s; }
+
 @keyframes tgTyping {
   0%,80%,100% { opacity: .3; transform: scale(.7); }
   40% { opacity: 1; transform: scale(1); }
@@ -421,10 +457,11 @@ body {
   gap: 6px;
   z-index: 80;
 }
+
 #tg-jump-indicator.hidden { display: none; }
 
 /* =========================
-   DYNAMIC GLASS INPUT BAR (centered, wider pill, fixed circle)
+   DYNAMIC GLASS INPUT BAR
 ========================= */
 .tg-input-bar {
   display: flex;
@@ -432,18 +469,24 @@ body {
   gap: 8px;
   background: rgba(23, 33, 43, 0.7);
   border-radius: 40px;
-  padding: 6px 12px;
+  padding: 6px 10px 6px 12px;
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.08);
-  width: auto;
-  min-width: 320px;   /* ← wider pill for balance */
-  max-width: 90%;
+
+  width: min(100%, 560px);
+  max-width: calc(100vw - 24px);
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: visible;
 }
+
 .tg-input-bar:hover {
   background: rgba(23, 33, 43, 0.85);
 }
+
 .tg-comment-input {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   background: transparent;
   border: none;
   outline: none;
@@ -451,8 +494,9 @@ body {
   font-size: 14px;
   padding: 8px 0;
 }
-/* Icon buttons (smile, needle) */
+
 .input-icon-btn {
+  flex: 0 0 auto;
   background: none;
   border: none;
   color: #9aa7bd;
@@ -464,32 +508,39 @@ body {
   border-radius: 50%;
   transition: all 0.2s;
 }
+
 .input-icon-btn:hover {
   background: rgba(255,255,255,0.1);
 }
-/* Dynamic blue circle button (mic / send) – completely locked size, no stretch */
+
+/* Dynamic blue circle button (mic / send) */
 .dynamic-btn {
-  flex: 0 0 auto !important;
+  flex: 0 0 36px !important;
   width: 36px !important;
   height: 36px !important;
   min-width: 36px !important;
   max-width: 36px !important;
   padding: 0 !important;
+  margin-left: 2px;
   background-color: #2ea6ff !important;
   border-radius: 50%;
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  box-sizing: border-box;
   transition: background 0.2s;
 }
+
 .dynamic-btn:hover {
   background-color: #1e8ae0 !important;
 }
+
 /* Override any inherited padding from .input-icon-btn */
 .dynamic-btn.input-icon-btn {
   padding: 0 !important;
 }
+
 /* Force SVG inside to be perfectly centered and not stretch the button */
 .dynamic-btn svg {
   width: 20px;
@@ -517,6 +568,7 @@ body {
   white-space: nowrap;
   animation: joinSlideIn 0.2s ease-out;
 }
+
 @keyframes joinSlideIn {
   0% { opacity: 0; transform: translateY(-4px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -529,7 +581,23 @@ body {
   .tg-bubble { max-width: 86%; }
   .tg-bubble-image { max-height: 220px; }
   .tg-pin-banner img { max-width: 50px; max-height: 50px; }
-  .tg-pin-banner .pin-btn-container { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .tg-input-bar { padding: 6px 12px; min-width: 280px; }  /* slightly smaller on mobile but still wide */
+
+  .tg-pin-banner .pin-btn-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .tg-input-wrapper {
+    padding-inline: 10px;
+  }
+
+  .tg-input-bar {
+    width: 100%;
+    max-width: calc(100vw - 20px);
+    min-width: 0;
+    padding: 6px 10px 6px 12px;
+  }
+
   #tg-jump-indicator { bottom: 70px; }
 }
