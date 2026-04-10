@@ -457,7 +457,7 @@ body {
   border: none;
   color: #9aa7bd;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 6px;
@@ -467,17 +467,20 @@ body {
 .input-icon-btn:hover {
   background: rgba(255,255,255,0.1);
 }
-/* Dynamic blue circle button (mic / send) – fixed size, no shrink, no padding */
+/* Dynamic blue circle button (mic / send) – completely locked size */
 .dynamic-btn {
-  flex: 0 0 auto !important;
+  flex: none !important;
   width: 34px !important;
   height: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
   padding: 0 !important;
   background-color: #2ea6ff !important;
   border-radius: 50%;
-  display: flex;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   transition: background 0.2s;
 }
 .dynamic-btn:hover {
