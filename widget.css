@@ -1,4 +1,4 @@
-/* widget.css — Telegram 2026 replica — GRID LAYOUT + dynamic glass input bar (centered, white icons) */
+/* widget.css — Telegram 2026 replica — GRID LAYOUT + dynamic glass input bar (centered, white icons, fixed circle size) */
 
 /* =========================
    VARIABLES
@@ -424,7 +424,7 @@ body {
 #tg-jump-indicator.hidden { display: none; }
 
 /* =========================
-   DYNAMIC GLASS INPUT BAR (centered, white icons inside blue circle)
+   DYNAMIC GLASS INPUT BAR (centered, white icons, fixed circle size)
 ========================= */
 .tg-input-bar {
   display: flex;
@@ -467,13 +467,14 @@ body {
 .input-icon-btn:hover {
   background: rgba(255,255,255,0.1);
 }
-/* Dynamic blue circle button (mic / send) */
+/* Dynamic blue circle button (mic / send) – fixed size, no shrink */
 .dynamic-btn {
+  flex-shrink: 0 !important;
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
   background-color: #2ea6ff !important;
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -482,13 +483,11 @@ body {
 .dynamic-btn:hover {
   background-color: #1e8ae0 !important;
 }
-/* Force white stroke for the SVG inside the blue circle (Lucide icons use stroke) */
-.dynamic-btn svg,
-#dynamic-send-btn svg {
-  stroke: white !important;
-  color: white !important;
+/* Force SVG inside to be perfectly centered and not stretch the button */
+.dynamic-btn svg {
   width: 18px;
   height: 18px;
+  display: block;
 }
 
 /* =========================
