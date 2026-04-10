@@ -467,9 +467,9 @@ body {
 .input-icon-btn:hover {
   background: rgba(255,255,255,0.1);
 }
-/* Dynamic blue circle button (mic / send) – fixed size, no shrink */
+/* Dynamic blue circle button (mic / send) – fixed size, no shrink, no padding */
 .dynamic-btn {
-  flex-shrink: 0 !important;
+  flex: 0 0 auto !important;
   width: 34px !important;
   height: 34px !important;
   padding: 0 !important;
@@ -483,11 +483,16 @@ body {
 .dynamic-btn:hover {
   background-color: #1e8ae0 !important;
 }
+/* Override any inherited padding from .input-icon-btn */
+.dynamic-btn.input-icon-btn {
+  padding: 0 !important;
+}
 /* Force SVG inside to be perfectly centered and not stretch the button */
 .dynamic-btn svg {
   width: 18px;
   height: 18px;
   display: block;
+  stroke: white;
 }
 
 /* =========================
