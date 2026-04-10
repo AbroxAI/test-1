@@ -424,7 +424,7 @@ body {
 #tg-jump-indicator.hidden { display: none; }
 
 /* =========================
-   DYNAMIC GLASS INPUT BAR (centered, white icons, fixed circle size, wider pill)
+   DYNAMIC GLASS INPUT BAR (centered, wider pill, fixed circle)
 ========================= */
 .tg-input-bar {
   display: flex;
@@ -436,7 +436,7 @@ body {
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.08);
   width: auto;
-  min-width: 300px;    /* increased from 260px to prevent cutoff */
+  min-width: 320px;   /* ← wider pill for balance */
   max-width: 90%;
 }
 .tg-input-bar:hover {
@@ -467,13 +467,13 @@ body {
 .input-icon-btn:hover {
   background: rgba(255,255,255,0.1);
 }
-/* Dynamic blue circle button (mic / send) – completely locked size */
+/* Dynamic blue circle button (mic / send) – completely locked size, no stretch */
 .dynamic-btn {
-  flex: none !important;
-  width: 34px !important;
-  height: 34px !important;
-  min-width: 34px !important;
-  max-width: 34px !important;
+  flex: 0 0 auto !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
   padding: 0 !important;
   background-color: #2ea6ff !important;
   border-radius: 50%;
@@ -492,8 +492,8 @@ body {
 }
 /* Force SVG inside to be perfectly centered and not stretch the button */
 .dynamic-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   display: block;
   stroke: white;
 }
@@ -530,6 +530,6 @@ body {
   .tg-bubble-image { max-height: 220px; }
   .tg-pin-banner img { max-width: 50px; max-height: 50px; }
   .tg-pin-banner .pin-btn-container { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .tg-input-bar { padding: 6px 12px; min-width: 260px; }
+  .tg-input-bar { padding: 6px 12px; min-width: 280px; }  /* slightly smaller on mobile but still wide */
   #tg-jump-indicator { bottom: 70px; }
 }
