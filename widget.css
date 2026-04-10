@@ -101,7 +101,7 @@ body {
 /* Input wrapper - always at bottom, centered horizontally */
 .tg-input-wrapper {
   grid-row: 3;
-  padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+  padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
   background: transparent;
   z-index: 60;
   display: flex;
@@ -466,15 +466,15 @@ body {
 .tg-input-bar {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: rgba(23, 33, 43, 0.7);
   border-radius: 40px;
-  padding: 6px 10px 6px 12px;
+  padding: 6px 10px;
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.08);
 
-  width: min(100%, 560px);
-  max-width: calc(100vw - 24px);
+  width: min(100%, 520px);
+  max-width: calc(100vw - 20px);
   min-width: 0;
   box-sizing: border-box;
   overflow: visible;
@@ -521,7 +521,7 @@ body {
   min-width: 36px !important;
   max-width: 36px !important;
   padding: 0 !important;
-  margin-left: 2px;
+  margin-left: 0;
   background-color: #2ea6ff !important;
   border-radius: 50%;
   display: inline-flex !important;
@@ -596,7 +596,7 @@ body {
     width: 100%;
     max-width: calc(100vw - 20px);
     min-width: 0;
-    padding: 6px 10px 6px 12px;
+    padding: 6px 10px;
   }
 
   #tg-jump-indicator { bottom: 70px; }
