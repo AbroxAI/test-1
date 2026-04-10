@@ -67,18 +67,27 @@
       <span id="tg-jump-text">New messages</span>
     </div>
 
-    <!-- DYNAMIC GLASS INPUT BAR (with white mic/send icons) -->
+    <!-- INPUT BAR -->
     <div class="tg-input-wrapper" role="form" aria-label="Send a message">
       <div class="tg-input-bar glass" id="tg-input-bar">
-        <button id="emoji-btn" class="input-icon-btn" aria-label="Emoji">
+        <button id="emoji-btn" class="input-icon-btn" aria-label="Emoji" type="button">
           <i data-lucide="smile" class="w-5 h-5"></i>
         </button>
-        <input type="text" id="tg-message-input" class="tg-comment-input" placeholder="Type a message..." autocomplete="off">
-        <button id="attachment-btn" class="input-icon-btn" aria-label="Attach media">
+
+        <input
+          type="text"
+          id="tg-message-input"
+          class="tg-comment-input"
+          placeholder="Type a message..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+
+        <button id="attachment-btn" class="input-icon-btn" aria-label="Attach media" type="button">
           <i data-lucide="paperclip" class="w-5 h-5"></i>
         </button>
-        <button id="dynamic-send-btn" class="input-icon-btn dynamic-btn" aria-label="Send or voice">
-          <!-- Initially mic icon (raw SVG with white stroke) -->
+
+        <button id="dynamic-send-btn" class="input-icon-btn dynamic-btn" aria-label="Voice message" type="button">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
             <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
@@ -93,18 +102,18 @@
   <!-- Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Scripts (original loading order) -->
+  <!-- Scripts -->
   <script src="identity-personas.js"></script>
   <script src="bubble-renderer-fixed-v2.js"></script>
   <script src="ultimate-realism-full-v7.13.js"></script>
   <script src="interactions-v14.1-crowd-join-replies-typing-auto-hide.js"></script>
   <script src="app-fixed.js"></script>
 
-  <!-- Dynamic input logic (with raw SVG icons for white color) -->
+  <!-- Dynamic input logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      if(window.lucide?.createIcons) window.lucide.createIcons();
-      if(!window.TGRenderer) {
+      if (window.lucide?.createIcons) window.lucide.createIcons();
+      if (!window.TGRenderer) {
         console.error("TGRenderer not loaded yet.");
         return;
       }
@@ -115,7 +124,6 @@
       const attachmentBtn = document.getElementById('attachment-btn');
       let currentIcon = 'mic';
 
-      // SVG strings with white stroke
       const micSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>';
       const sendSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
 
@@ -135,11 +143,14 @@
       function sendMessage() {
         const text = messageInput.value.trim();
         if (!text) return;
+
         const currentUser = { name: "You", avatar: null, isAdmin: false };
+
         if (window.TGRenderer?.appendMessage) {
           window.TGRenderer.appendMessage(currentUser, text, { type: 'outgoing', timestamp: new Date() });
           messageInput.value = '';
           updateDynamicButton();
+
           const container = document.getElementById('tg-comments-container');
           if (container) container.scrollTop = container.scrollHeight;
         } else {
@@ -166,7 +177,6 @@
       if (emojiBtn) emojiBtn.addEventListener('click', () => alert("Emoji picker coming soon"));
       if (attachmentBtn) attachmentBtn.addEventListener('click', () => alert("Media picker coming soon"));
 
-      // Header typing listeners (optional)
       document.addEventListener('headerTyping', (e) => console.log(e.detail.name + " is typing…"));
       document.addEventListener('headerTypingStop', (e) => console.log(e.detail.name + " stopped typing"));
     });
